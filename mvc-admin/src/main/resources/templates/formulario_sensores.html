@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{sensores.titulo}">Gestão de Sensores</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-bar a {
+            color: #fff;
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin: 0.5rem 0 0.2rem;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-salvar { background-color: #28a745; }
+        .btn-cancelar { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{sensores.titulo}">Gestão de Sensores</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <form th:action="@{/sensores/salvar}" method="post" th:object="${sensor}">
+        <label th:for="codigo" th:text="#{sensores.codigo}">Código do Sensor</label>
+        <input type="text" id="codigo" th:field="*{sensores.codigo}" required>
+
+        <label th:for="dataInstalacao" th:text="#{sensores.dataInstalacao}">Data de Instalação</label>
+        <input type="date" id="dataInstalacao" th:field="*{sensores.dataInstalacao}" required>
+
+        <label th:for="status" th:text="#{sensores.status}">Status</label>
+        <select id="status" th:field="*{sensores.status}" required>
+            <option value="ATIVO" th:text="#{sensores.status.ativo}">Ativo</option>
+            <option value="INATIVO" th:text="#{sensores.status.inativo}">Inativo</option>
+            <option value="MANUTENCAO" th:text="#{sensores.status.manutencao}">Manutenção</option>
+        </select>
+
+        <div class="btn-container">
+            <button type="submit" class="btn btn-salvar" th:text="#{sensores.salvar}">Salvar</button>
+            <a th:href="@{/dashboard}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

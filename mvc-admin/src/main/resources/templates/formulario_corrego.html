@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{corregos.formTitulo}">Cadastro de Córrego</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-bar a {
+            color: #fff;
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 0.5rem 0 0.2rem;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-salvar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-cancelar {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin: -0.5rem 0 1rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{corregos.formTitulo}">Cadastro de Córrego</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <form th:action="@{/corregos/salvar}" method="post" th:object="${corrego}">
+        <label for="nome" th:text="#{corregos.nome}">Nome</label>
+        <input type="text" id="nome" th:field="*{corregos.nome}" required>
+        <div class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{corregos.nome}"></div>
+
+        <label for="latitude" th:text="#{corregos.latitude}">Latitude</label>
+        <input type="text" id="latitude" th:field="*{corregos.latitude}" required>
+        <div class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{corregos.latitude}"></div>
+
+        <label for="longitude" th:text="#{corregos.longitude}">Longitude</label>
+        <input type="text" id="longitude" th:field="*{corregos.longitude}" required>
+        <div class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{corregos.longitude}"></div>
+
+        <label th:text="#{corregos.nivelAlerta}">Nível de Alerta</label>
+        <input type="number" min="0" step="0.01" th:field="*{corregos.nivelAlerta}" required>
+        <div class="error" th:if="${#fields.hasErrors('nivelAlerta')}" th:errors="*{corregos.nivelAlerta}"></div>
+
+        <label th:text="#{corregos.nivelCritico}">Nível Crítico</label>
+        <input type="number" min="0" step="0.01" th:field="*{corregos.nivelCritico}" required>
+        <div class="error" th:if="${#fields.hasErrors('nivelCritico')}" th:errors="*{corregos.nivelCritico}"></div>
+
+        <div class="btn-container">
+            <button type="submit" class="btn btn-salvar" th:text="#{corregos.salvar}">Salvar</button>
+            <a th:href="@{/dashboard}" class="btn btn-cancelar" th:text="#{corregos.cancelar}">Cancelar</a>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

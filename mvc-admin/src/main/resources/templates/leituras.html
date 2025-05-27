@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{leituras.titulo}">Visualização de Leituras</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-bar a {
+            color: #fff;
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filtro-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: flex-end;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 0.6rem 1.2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        canvas {
+            margin-top: 2rem;
+        }
+
+        .btn-voltar {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{leituras.titulo}">Visualização de Leituras</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <form class="filtro-form" th:action="@{/leituras/filtro}" method="get">
+        <div>
+            <label for="corrego" th:text="#{leituras.corrego}">Córrego:</label><br>
+            <select id="corrego" name="corrego">
+                <option th:each="c : ${corregos}" th:value="${c.id}" th:text="${c.nome}">Córrego A</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="inicio" th:text="#{leituras.inicio}">Início:</label><br>
+            <input type="date" id="inicio" name="inicio">
+        </div>
+
+        <div>
+            <label for="fim" th:text="#{leituras.fim}">Fim:</label><br>
+            <input type="date" id="fim" name="fim">
+        </div>
+
+        <div>
+            <button type="submit" th:text="#{leituras.filtrar}">Filtrar</button>
+        </div>
+    </form>
+
+    <canvas id="graficoLeituras" height="100"></canvas>
+
+    <a th:href="@{/dashboard}" class="btn-voltar" th:text="#{leituras.voltar}">Voltar</a>
+</div>
+
+<script>
+    const ctx = document.getElementById('graficoLeituras');
+    const graficoLeituras = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['01/05', '02/05', '03/05', '04/05'],
+            datasets: [{
+                label: 'Nível do Córrego (m)',
+                data: [1.2, 1.5, 1.8, 2.0],
+                borderColor: '#1e3c72',
+                backgroundColor: 'rgba(30, 60, 114, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

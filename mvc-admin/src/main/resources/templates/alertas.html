@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{alertas.titulo}">Alertas Emitidos</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-bar a {
+            color: #fff;
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.2rem 0.2rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-encerrar { background-color: #28a745; color: white; }
+        .btn-detalhes { background-color: #007bff; color: white; }
+
+        .btn-voltar {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        @media (min-width: 600px) {
+            .btn-group {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{alertas.titulo}">Alertas Emitidos</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{alertas.dataHora}">Data/Hora</th>
+            <th th:text="#{alertas.corrego}">Córrego</th>
+            <th th:text="#{alertas.tipo}">Tipo</th>
+            <th th:text="#{alertas.status}">Status</th>
+            <th th:text="#{alertas.acoes}">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="alerta : ${alertas}">
+            <td th:text="${alerta.dataHora}">2025-05-25 14:00</td>
+            <td th:text="${alerta.corrego.nome}">Córrego A</td>
+            <td th:text="#{'alertas.tipo.' + alerta.tipo.toLowerCase()}">Crítico</td>
+            <td th:text="${alerta.resolvido} ? #{alertas.resolvido} : #{alertas.pendente}">Pendente</td>
+            <td>
+                <div class="btn-group">
+                    <a th:if="${!alerta.resolvido}" th:href="@{'/alertas/encerrar/' + ${alerta.id}}" class="btn btn-encerrar" th:text="#{alertas.encerrar}">Encerrar Alerta</a>
+                    <a th:href="@{'/alertas/' + ${alerta.id}}" class="btn btn-detalhes" th:text="#{alertas.detalhes}">Ver Detalhes</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/dashboard}" class="btn-voltar" th:text="#{alertas.voltar}">Voltar</a>
+</div>
+</body>
+</html>

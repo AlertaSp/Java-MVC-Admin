@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerta SP - Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .language-bar {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 0.9rem;
+    }
+
+    .language-bar a {
+      color: #fff;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+
+    .language-bar a:hover {
+      text-decoration: underline;
+    }
+
+    .login-container {
+      background-color: #fff;
+      padding: 2rem 3rem;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .login-container h1 {
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: #222;
+    }
+
+    .login-container label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+      color: #333;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .separator {
+      margin: 1.5rem 0;
+      border-top: 1px solid #ccc;
+    }
+
+    .btn-github {
+      background-color: #24292e;
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      gap: 0.5rem;
+    }
+
+    .btn-github img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .btn-github:hover {
+      background-color: #3b4045;
+    }
+  </style>
+</head>
+<body>
+<div class="language-bar">
+  🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+  <a th:href="@{'?lang=en'}">English</a> |
+  <a th:href="@{'?lang=es'}">Español</a>
+</div>
+
+<div class="login-container">
+  <h1 th:text="#{login.titulo}">Login do Administrador</h1>
+
+  <form th:action="@{/login}" method="post">
+    <label for="username" th:text="#{login.usuario}">Usuário:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password" th:text="#{login.senha}">Senha:</label>
+    <input type="password" id="password" name="password" required>
+
+    <div class="error-message" th:if="${param.error}" th:text="#{login.erro}">
+      Usuário ou senha inválidos.
+    </div>
+
+    <button type="submit" class="btn-primary" th:text="#{login.entrar}">Entrar</button>
+  </form>
+
+  <div class="separator"></div>
+  <p th:text="#{login.ouGithub}">Ou entre com:</p>
+  <a th:href="@{/oauth2/authorization/github}" class="btn-github">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+    GitHub
+  </a>
+</div>
+</body>
+</html>

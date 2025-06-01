@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{sensores.titulo}">Gestão de Sensores</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${idSensor != null} ? #{sensores.editarTitulo} : #{sensores.novoTitulo}">Formulário de Sensor</title>
     <style>
         body {
             margin: 0;
@@ -25,10 +25,15 @@
             color: #fff;
             margin: 0 0.5rem;
             text-decoration: none;
+            font-weight: bold;
+        }
+
+        .language-bar a:hover {
+            text-decoration: underline;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 2rem auto;
             background: white;
             padding: 2rem;
@@ -38,6 +43,8 @@
 
         h2 {
             margin-bottom: 1.5rem;
+            color: #1e3c72;
+            text-align: center;
         }
 
         label {
@@ -46,18 +53,21 @@
             font-weight: bold;
         }
 
-        input[type="text"], input[type="date"], select {
+        input[type="text"],
+        input[type="date"],
+        select {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .btn-container {
             display: flex;
-            justify-content: flex-end;
             gap: 1rem;
+            justify-content: flex-end;
         }
 
         .btn {
@@ -70,38 +80,77 @@
             text-decoration: none;
         }
 
-        .btn-salvar { background-color: #28a745; }
-        .btn-cancelar { background-color: #6c757d; }
+        .btn-salvar {
+            background-color: #28a745;
+        }
+
+        .btn-salvar:hover {
+            background-color: #218838;
+        }
+
+        .btn-cancelar {
+            background-color: #6c757d;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #5a6268;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
 <header>
-    <h1 th:text="#{sensores.titulo}">Gestão de Sensores</h1>
+    <h1 th:text="${idSensor != null} ? #{sensores.editarTitulo} : #{sensores.novoTitulo}">Formulário de Sensor</h1>
     <div class="language-bar">
-        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        🌐
+        <a th:href="@{'?lang=pt_BR'}">Português</a> |
         <a th:href="@{'?lang=en'}">English</a> |
         <a th:href="@{'?lang=es'}">Español</a>
     </div>
 </header>
 
 <div class="container">
-    <form th:action="@{/sensores/salvar}" method="post" th:object="${sensor}">
-        <label th:for="codigo" th:text="#{sensores.codigo}">Código do Sensor</label>
-        <input type="text" id="codigo" th:field="*{sensores.codigo}" required>
+    <form th:action="${idSensor != null} ? @{'/admin/sensores/editar/' + ${idSensor}} : @{/admin/sensores}"
+          th:object="${sensorForm}" method="post">
+        <!-- Código -->
+        <div th:if="${#fields.hasErrors('codigo')}" class="error" th:errors="*{codigo}"></div>
+        <label th:for="codigo" th:text="#{sensores.codigo}">Código</label>
+        <input type="text" id="codigo" th:field="*{codigo}" placeholder="Ex: S001" required />
 
+        <!-- Data de Instalação -->
+        <div th:if="${#fields.hasErrors('dataInstalacao')}" class="error" th:errors="*{dataInstalacao}"></div>
         <label th:for="dataInstalacao" th:text="#{sensores.dataInstalacao}">Data de Instalação</label>
-        <input type="date" id="dataInstalacao" th:field="*{sensores.dataInstalacao}" required>
+        <input type="date" id="dataInstalacao" th:field="*{dataInstalacao}" />
 
+        <!-- Status (readonly) -->
         <label th:for="status" th:text="#{sensores.status}">Status</label>
-        <select id="status" th:field="*{sensores.status}" required>
-            <option value="ATIVO" th:text="#{sensores.status.ativo}">Ativo</option>
-            <option value="INATIVO" th:text="#{sensores.status.inativo}">Inativo</option>
-            <option value="MANUTENCAO" th:text="#{sensores.status.manutencao}">Manutenção</option>
+        <input type="text" id="status" th:field="*{status}" readonly />
+
+        <!-- Córrego -->
+        <div th:if="${#fields.hasErrors('idCorrego')}" class="error" th:errors="*{idCorrego}"></div>
+        <label th:for="idCorrego" th:text="#{sensores.corrego}">Córrego</label>
+        <select id="idCorrego" th:field="*{idCorrego}" required>
+            <option th:each="c : ${corregos}"
+                    th:value="${c.id()}"
+                    th:text="${c.nome()}">
+                Córrego
+            </option>
         </select>
 
+        <!-- Botões -->
         <div class="btn-container">
-            <button type="submit" class="btn btn-salvar" th:text="#{sensores.salvar}">Salvar</button>
-            <a th:href="@{/dashboard}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">Cancelar</a>
+            <button type="submit" class="btn btn-salvar"
+                    th:text="${idSensor != null} ? #{sensores.atualizar} : #{sensores.salvar}">
+                Salvar
+            </button>
+            <a th:href="@{/admin/sensores}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">
+                Cancelar
+            </a>
         </div>
     </form>
 </div>

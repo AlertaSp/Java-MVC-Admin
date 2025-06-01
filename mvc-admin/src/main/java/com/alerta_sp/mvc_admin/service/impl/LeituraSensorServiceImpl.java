@@ -2,6 +2,7 @@ package com.alerta_sp.mvc_admin.service.impl;
 
 import com.alerta_sp.mvc_admin.dto.LeituraFormDTO;
 import com.alerta_sp.mvc_admin.dto.LeituraView;
+import com.alerta_sp.mvc_admin.dto.SensorView;
 import com.alerta_sp.mvc_admin.model.LeituraSensor;
 import com.alerta_sp.mvc_admin.model.Sensor;
 import com.alerta_sp.mvc_admin.repository.LeituraSensorRepository;
@@ -9,7 +10,6 @@ import com.alerta_sp.mvc_admin.repository.SensorRepository;
 import com.alerta_sp.mvc_admin.service.LeituraSensorService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,7 +21,8 @@ public class LeituraSensorServiceImpl implements LeituraSensorService {
     private final LeituraSensorRepository leituraSensorRepository;
     private final SensorRepository sensorRepository;
 
-    public LeituraSensorServiceImpl(LeituraSensorRepository leituraSensorRepository, SensorRepository sensorRepository) {
+    public LeituraSensorServiceImpl(LeituraSensorRepository leituraSensorRepository,
+                                    SensorRepository sensorRepository) {
         this.leituraSensorRepository = leituraSensorRepository;
         this.sensorRepository = sensorRepository;
     }
@@ -33,7 +34,6 @@ public class LeituraSensorServiceImpl implements LeituraSensorService {
 
         LeituraSensor leitura = new LeituraSensor(sensor, dto.getNivel());
         LeituraSensor salvo = leituraSensorRepository.save(leitura);
-
         return LeituraView.fromEntity(salvo);
     }
 
@@ -53,5 +53,12 @@ public class LeituraSensorServiceImpl implements LeituraSensorService {
     @Override
     public void deletarPorId(Long id) {
         leituraSensorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<SensorView> listarSensoresDisponiveis() {
+        return sensorRepository.findAll().stream()
+                .map(SensorView::fromEntity)
+                .collect(Collectors.toList());
     }
 }

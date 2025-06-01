@@ -97,15 +97,15 @@
 <div class="container">
     <form th:action="@{/config/salvar}" method="post" th:object="${config}">
         <label for="apiKey" th:text="#{config.apiKey}">API Key da Spring AI</label>
-        <input type="text" id="apiKey" th:field="*{apiKey}" required>
+        <input type="text" id="apiKey" th:field="*{config.apiKey}" required>
 
         <label for="parametro" th:text="#{config.parametros}">Parâmetros do Sistema</label>
-        <input type="text" id="parametro" th:field="*{parametros}" required>
+        <input type="text" id="parametro" th:field="*{config.parametros}" required>
 
         <label th:text="#{config.notificacoes}">Notificações</label>
         <div class="checkbox-group">
-            <label><input type="checkbox" th:field="*{emailNotificacao}"> Email</label>
-            <label><input type="checkbox" th:field="*{pushNotificacao}"> Push</label>
+            <label><input type="checkbox" th:field="*{config.emailNotificacao}"> Email</label>
+            <label><input type="checkbox" th:field="*{config.pushNotificacao}"> Push</label>
         </div>
 
         <div class="btn-container">

@@ -115,42 +115,65 @@
 </header>
 
 <div class="container">
-    <form th:action="${idSensor != null} ? @{'/admin/sensores/editar/' + ${idSensor}} : @{/admin/sensores}"
-          th:object="${sensorForm}" method="post">
-        <!-- Código -->
-        <div th:if="${#fields.hasErrors('codigo')}" class="error" th:errors="*{codigo}"></div>
+    <!-- Formulário de edição, se idSensor NÃO for nulo -->
+    <form th:if="${idSensor != null}"
+          th:action="@{/admin/sensores/editar/{id}(id=${idSensor})}"
+          th:object="${sensorForm}"
+          method="post">
+        <!-- (mesmos campos e botões abaixo) -->
+        <div th:if="${#fields.hasErrors('codigo')}" class="error" th:errors="*{sensores.codigo}"></div>
         <label th:for="codigo" th:text="#{sensores.codigo}">Código</label>
-        <input type="text" id="codigo" th:field="*{codigo}" placeholder="Ex: S001" required />
+        <input type="text" id="codigo" th:field="*{sensores.codigo}" placeholder="Ex: S001" required />
 
-        <!-- Data de Instalação -->
-        <div th:if="${#fields.hasErrors('dataInstalacao')}" class="error" th:errors="*{dataInstalacao}"></div>
+        <div th:if="${#fields.hasErrors('dataInstalacao')}" class="error" th:errors="*{sensores.dataInstalacao}"></div>
         <label th:for="dataInstalacao" th:text="#{sensores.dataInstalacao}">Data de Instalação</label>
-        <input type="date" id="dataInstalacao" th:field="*{dataInstalacao}" />
+        <input type="date" id="dataInstalacao" th:field="*{sensores.dataInstalacao}" />
 
-        <!-- Status (readonly) -->
         <label th:for="status" th:text="#{sensores.status}">Status</label>
-        <input type="text" id="status" th:field="*{status}" readonly />
+        <input type="text" id="status" th:field="*{sensores.status}" readonly />
 
-        <!-- Córrego -->
-        <div th:if="${#fields.hasErrors('idCorrego')}" class="error" th:errors="*{idCorrego}"></div>
+        <div th:if="${#fields.hasErrors('idCorrego')}" class="error" th:errors="*{sensores.idCorrego}"></div>
         <label th:for="idCorrego" th:text="#{sensores.corrego}">Córrego</label>
-        <select id="idCorrego" th:field="*{idCorrego}" required>
+        <select id="idCorrego" th:field="*{sensores.idCorrego}" required>
             <option th:each="c : ${corregos}"
                     th:value="${c.id()}"
-                    th:text="${c.nome()}">
-                Córrego
-            </option>
+                    th:text="${c.nome()}">Córrego</option>
         </select>
 
-        <!-- Botões -->
         <div class="btn-container">
-            <button type="submit" class="btn btn-salvar"
-                    th:text="${idSensor != null} ? #{sensores.atualizar} : #{sensores.salvar}">
-                Salvar
-            </button>
-            <a th:href="@{/admin/sensores}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">
-                Cancelar
-            </a>
+            <button type="submit" class="btn btn-salvar" th:text="#{sensores.atualizar}">Atualizar</button>
+            <a th:href="@{/admin/sensores}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- Formulário de novo sensor, se idSensor for nulo -->
+    <form th:if="${idSensor == null}"
+          th:action="@{/admin/sensores}"
+          th:object="${sensorForm}"
+          method="post">
+        <!-- (mesmos campos e botões abaixo, trocando apenas o texto do botão “Salvar”) -->
+        <div th:if="${#fields.hasErrors('codigo')}" class="error" th:errors="*{sensores.codigo}"></div>
+        <label th:for="codigo" th:text="#{sensores.codigo}">Código</label>
+        <input type="text" id="sensores.codigo" th:field="*{sensores.codigo}" placeholder="Ex: S001" required />
+
+        <div th:if="${#fields.hasErrors('dataInstalacao')}" class="error" th:errors="*{sensores.dataInstalacao}"></div>
+        <label th:for="dataInstalacao" th:text="#{sensores.dataInstalacao}">Data de Instalação</label>
+        <input type="date" id="sensores.dataInstalacao" th:field="*{sensores.dataInstalacao}" />
+
+        <label th:for="status" th:text="#{sensores.status}">Status</label>
+        <input type="text" id="sensores.status" th:field="*{sensores.status}" readonly />
+
+        <div th:if="${#fields.hasErrors('idCorrego')}" class="error" th:errors="*{sensores.idCorrego}"></div>
+        <label th:for="idCorrego" th:text="#{sensores.corrego}">Córrego</label>
+        <select id="sensores.idCorrego" th:field="*{sensores.idCorrego}" required>
+            <option th:each="c : ${corregos}"
+                    th:value="${c.id()}"
+                    th:text="${c.nome()}">Córrego</option>
+        </select>
+
+        <div class="btn-container">
+            <button type="submit" class="btn btn-salvar" th:text="#{sensores.salvar}">Salvar</button>
+            <a th:href="@{/admin/sensores}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">Cancelar</a>
         </div>
     </form>
 </div>

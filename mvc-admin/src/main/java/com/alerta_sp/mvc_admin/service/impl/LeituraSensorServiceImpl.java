@@ -10,6 +10,7 @@ import com.alerta_sp.mvc_admin.repository.SensorRepository;
 import com.alerta_sp.mvc_admin.service.LeituraSensorService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +33,9 @@ public class LeituraSensorServiceImpl implements LeituraSensorService {
         Sensor sensor = sensorRepository.findById(dto.getIdSensor())
                 .orElseThrow(() -> new IllegalArgumentException("Sensor não encontrado"));
 
-        LeituraSensor leitura = new LeituraSensor(sensor, dto.getNivel());
+        // Aqui invertemos a ordem para “(nivel, sensor)”, conforme o construtor definido em LeituraSensor:
+        LeituraSensor leitura = new LeituraSensor(dto.getNivel(), sensor);
+
         LeituraSensor salvo = leituraSensorRepository.save(leitura);
         return LeituraView.fromEntity(salvo);
     }

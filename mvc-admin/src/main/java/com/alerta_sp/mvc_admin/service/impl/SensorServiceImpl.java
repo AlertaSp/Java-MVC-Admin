@@ -1,6 +1,5 @@
 package com.alerta_sp.mvc_admin.service.impl;
 
-import com.alerta_sp.mvc_admin.dto.CorregoView;
 import com.alerta_sp.mvc_admin.dto.SensorFormDTO;
 import com.alerta_sp.mvc_admin.dto.SensorView;
 import com.alerta_sp.mvc_admin.model.Corrego;
@@ -22,31 +21,28 @@ public class SensorServiceImpl implements SensorService {
     private final SensorRepository sensorRepository;
     private final CorregoRepository corregoRepository;
 
-    public SensorServiceImpl(SensorRepository sensorRepository, CorregoRepository corregoRepository) {
+    public SensorServiceImpl(SensorRepository sensorRepository,
+                             CorregoRepository corregoRepository) {
         this.sensorRepository = sensorRepository;
         this.corregoRepository = corregoRepository;
     }
 
     @Override
-    public SensorView salvarSensor(SensorFormDTO dto) {
-        // Busca o córrego referenciado pelo ID
+    public SensorView salvar(SensorFormDTO dto) {
+        // 1) Recupera o córrego
         Corrego corrego = corregoRepository.findById(dto.getIdCorrego())
                 .orElseThrow(() -> new IllegalArgumentException("Córrego não encontrado"));
 
-        // Constrói a entidade Sensor
-        Sensor sensor = new Sensor(dto.getCodigo(), dto.getDataInstalacao(), corrego);
+        // 2) Cria nova entidade Sensor
+        Sensor sensor = new Sensor();
+        sensor.setCodigo(dto.getCodigo());
+        sensor.setDataInstalacao(dto.getDataInstalacao());
+        // se o campo status vier no DTO, use dto.getStatus(); senão definir um default:
         sensor.setStatus(dto.getStatus() != null ? dto.getStatus() : "ATIVO");
+        sensor.setCorrego(corrego);
+
         Sensor salvo = sensorRepository.save(sensor);
-
-        // Retorna a "visão" do sensor salvo
         return SensorView.fromEntity(salvo);
-    }
-
-    @Override
-    public List<CorregoView> listarCorregosDisponiveis() {
-        return corregoRepository.findAll().stream()
-                .map(CorregoView::fromEntity)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,26 +59,29 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public void deletarPorId(Long id) {
-        sensorRepository.deleteById(id);
-    }
-
-    @Override
-    public SensorView atualizarSensor(Long id, SensorFormDTO dto) {
+    public SensorView atualizar(Long id, SensorFormDTO dto) {
         Sensor sensor = sensorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Sensor não encontrado"));
 
+        // Se ofertarmos edição de código, dataInstalacao e idCorrego:
         sensor.setCodigo(dto.getCodigo());
         sensor.setDataInstalacao(dto.getDataInstalacao());
+        // atualiza status se vier no DTO
         sensor.setStatus(dto.getStatus());
 
-        if (!sensor.getCorrego().getId().equals(dto.getIdCorrego())) {
-            Corrego corrego = corregoRepository.findById(dto.getIdCorrego())
-                    .orElseThrow(() -> new IllegalArgumentException("Córrego não encontrado"));
-            sensor.setCorrego(corrego);
-        }
+        Corrego corrego = corregoRepository.findById(dto.getIdCorrego())
+                .orElseThrow(() -> new IllegalArgumentException("Córrego não encontrado"));
+        sensor.setCorrego(corrego);
 
         Sensor atualizado = sensorRepository.save(sensor);
         return SensorView.fromEntity(atualizado);
+    }
+
+    @Override
+    public void deletarPorId(Long id) {
+        if (!sensorRepository.existsById(id)) {
+            throw new IllegalArgumentException("Sensor não encontrado.");
+        }
+        sensorRepository.deleteById(id);
     }
 }

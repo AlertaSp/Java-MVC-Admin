@@ -131,7 +131,7 @@
 </header>
 
 <div class="container">
-    <a class="btn btn-novo" th:href="@{/corregos/novo}" th:text="#{corregos.novo}">Cadastrar novo córrego</a>
+    <a class="btn btn-novo" th:href="@{/admin/corregos/novo}" th:text="#{corregos.novo}">Cadastrar novo córrego</a>
     <table>
         <thead>
         <tr>
@@ -151,14 +151,14 @@
             <td data-label="#{corregos.nivelAlerta}" th:text="${corrego.nivelAlerta} + ' m'">1.8 m</td>
             <td data-label="#{corregos.nivelCritico}" th:text="${corrego.nivelCritico} + ' m'">2.5 m</td>
             <td data-label="#{corregos.acoes}">
-                <a th:href="@{'/corregos/editar/' + ${corrego.id}}" class="btn btn-editar" th:text="#{corregos.editar}">Editar</a>
-                <a th:href="@{'/corregos/mapa/' + ${corrego.id}}" class="btn btn-mapa" th:text="#{corregos.mapa}">Ver Mapa</a>
-                <a th:href="@{'/corregos/remover/' + ${corrego.id}}" class="btn btn-remover" th:text="#{corregos.remover}" onclick="return confirm('Confirmar exclusão?');">Remover</a>
+                <a th:href="@{'/admin/corregos/editar/' + ${corrego.id}}" class="btn btn-editar" th:text="#{corregos.editar}">Editar</a>
+                <a th:href="@{'/admin/corregos/mapa/' + ${corrego.id}}" class="btn btn-mapa" th:text="#{corregos.mapa}">Ver Mapa</a>
+                <a th:href="@{'/admin/corregos/remover/' + ${corrego.id}}" class="btn btn-remover" th:text="#{corregos.remover}" onclick="return confirm('Confirmar exclusão?');">Remover</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a class="btn btn-voltar" th:href="@{/dashboard}" th:text="#{corregos.voltar}">Voltar</a>
+    <a class="btn btn-voltar" th:href="@{/admin/dashboard}" th:text="#{corregos.voltar}">Voltar</a>
 </div>
 </body>
 </html>

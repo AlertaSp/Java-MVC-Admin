@@ -1,0 +1,48 @@
+package com.alerta_sp.mvc_admin.controller;
+
+import com.alerta_sp.mvc_admin.dto.CorregoDashboardView;
+import com.alerta_sp.mvc_admin.dto.AlertaView;
+import com.alerta_sp.mvc_admin.service.CorregoService;
+import com.alerta_sp.mvc_admin.service.AlertaService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/admin")
+public class DashboardController {
+
+    private final CorregoService corregoService;
+    private final AlertaService alertaService;
+
+    public DashboardController(CorregoService corregoService,
+                               AlertaService alertaService) {
+        this.corregoService = corregoService;
+        this.alertaService  = alertaService;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        // 1) Lista de córregos com nível atual + status
+        List<CorregoDashboardView> listaCorregos = corregoService.listarTodosComStatus();
+        model.addAttribute("corregos", listaCorregos);
+
+        // 2) Lista com os últimos 5 alertas
+        List<AlertaView> listaAlertas = alertaService.listarUltimosAlertas(5);
+        model.addAttribute("alertas", listaAlertas);
+
+        // 3) Status dos serviços
+        model.addAttribute("rabbitStatus", "OK");
+        model.addAttribute("aiStatus", "OK");
+
+        // 4) Dados para o gráfico
+        model.addAttribute("labelsHorarios", List.of("00h", "04h", "08h", "12h", "16h", "20h"));
+        model.addAttribute("historicoNiveis", List.of(1.1, 1.3, 1.5, 1.7, 1.8, 2.1));
+
+        return "dashboard";
+    }
+}
+

@@ -163,19 +163,19 @@
     }
   </style>
 </head>
-<body>
 <header>
   <div class="menu-container">
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <h1 th:text="#{dashboard.titulo}">Dashboard - Alerta SP</h1>
   </div>
   <nav id="menu">
-    <a th:href="@{/dashboard}" th:text="#{menu.dashboard}">Dashboard</a>
-    <a th:href="@{/gestao-corrego}" th:text="#{menu.corregos}">Córregos</a>
-    <a th:href="@{/gestao-sensores}" th:text="#{menu.sensores}">Sensores</a>
-    <a th:href="@{/leituras}" th:text="#{menu.leituras}">Leituras</a>
-    <a th:href="@{/alertas}" th:text="#{menu.alertas}">Alertas</a>
-    <a th:href="@{/configuracoes}" th:text="#{menu.configuracoes}">Configurações</a>
+    <!-- Apontando para as rotas que você já implementou no controller -->
+    <a th:href="@{/admin/dashboard}"    th:text="#{menu.dashboard}">Dashboard</a>
+    <a th:href="@{/admin/corregos}"     th:text="#{menu.corregos}">Córregos</a>
+    <a th:href="@{/admin/sensores}"     th:text="#{menu.sensores}">Sensores</a>
+    <a th:href="@{/admin/leituras}"     th:text="#{menu.leituras}">Leituras</a>
+    <a th:href="@{/admin/alertas}"      th:text="#{menu.alertas}">Alertas</a>
+    <a th:href="@{/admin/configuracoes}"th:text="#{menu.configuracoes}">Configurações</a>
   </nav>
   <div class="language-bar">
     🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
@@ -230,7 +230,7 @@
 </div>
 
 <div style="text-align: center;">
-  <a th:href="@{/}" class="btn-sair" th:text="#{dashboard.sair}">Sair</a>
+  <a th:href="@{/home}" class="btn-sair" th:text="#{dashboard.sair}">Sair</a>
 </div>
 
 <script>

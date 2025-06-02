@@ -2,141 +2,156 @@ package com.alerta_sp.mvc_admin.controller;
 
 import com.alerta_sp.mvc_admin.dto.SensorFormDTO;
 import com.alerta_sp.mvc_admin.dto.SensorView;
+import com.alerta_sp.mvc_admin.dto.CorregoView;
 import com.alerta_sp.mvc_admin.service.SensorService;
+import com.alerta_sp.mvc_admin.service.CorregoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações CRUD de Sensores:
+ *   • listar todos (gestao_sensores.html)
+ *   • criar (formulario_sensor.html)
+ *   • editar (formulario_sensor.html)
+ *   • remover
+ */
 @Controller
 @RequestMapping("/admin/sensores")
 public class SensorController {
 
     private final SensorService sensorService;
+    private final CorregoService corregoService;
 
-    public SensorController(SensorService sensorService) {
-        this.sensorService = sensorService;
+    public SensorController(SensorService sensorService,
+                            CorregoService corregoService) {
+        this.sensorService  = sensorService;
+        this.corregoService = corregoService;
     }
 
     /**
-     * Lista todos os sensores.
+     * 1) GET  /admin/sensores
+     *    => Página de listagem de sensores (gestao_sensores.html).
+     *    => Espera um atributo “sensores” contendo List<SensorView>.
      */
     @GetMapping
-    public String listar(Model model) {
-        // Agora sensorService.listarTodos() retorna List<SensorView>
-        List<SensorView> sensores = sensorService.listarTodos();
-        model.addAttribute("sensores", sensores);
-        return "gestao_sensores"; // nome do template Thymeleaf
+    public String listarSensores(Model model) {
+        List<SensorView> todos = sensorService.listarTodos();
+        model.addAttribute("sensores", todos);
+        return "gestao_sensores";
     }
 
     /**
-     * Abre o formulário para cadastrar novo sensor.
+     * 2) GET  /admin/sensores/novo
+     *    => Exibe o formulário de cadastro (formulario_sensor.html).
+     *    => No model, adiciona:
+     *         • “sensorForm” → um SensorFormDTO vazio
+     *         • “corregos”   → lista de CorregoView para popular o <select>
      */
     @GetMapping("/novo")
-    public String abrirFormulario(Model model) {
+    public String exibirFormularioCadastro(Model model) {
         model.addAttribute("sensorForm", new SensorFormDTO());
-        // Para popular o <select> de córregos:
-        model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
+        List<CorregoView> listaCorregos = corregoService.listarTodos();
+        model.addAttribute("corregos", listaCorregos);
         return "formulario_sensor";
     }
 
     /**
-     * Recebe o POST do formulário de cadastro e salva um novo sensor.
+     * 3) POST /admin/sensores
+     *    => Recebe o SensorFormDTO do formulário de criação, valida e salva.
+     *    => Se houver erros, volta ao “formulario_sensor.html” mostrando mensagens.
+     *    => Se tudo OK, redireciona para GET /admin/sensores (listagem).
      */
     @PostMapping
-    public String salvar(@Valid @ModelAttribute("sensorForm") SensorFormDTO dto,
-                         BindingResult result,
-                         RedirectAttributes redirect,
-                         Model model) {
-        if (result.hasErrors()) {
-            // Em caso de erro de validação, volta ao formulário
-            model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
+    public String salvarSensor(
+            @Valid @ModelAttribute("sensorForm") SensorFormDTO formDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        // Se houver erros de validação, reabastece lista de córregos e retorna ao formulário:
+        if (bindingResult.hasErrors()) {
+            List<CorregoView> listaCorregos = corregoService.listarTodos();
+            model.addAttribute("corregos", listaCorregos);
             return "formulario_sensor";
         }
 
-        try {
-            sensorService.salvarSensor(dto);
-            redirect.addFlashAttribute("sucesso", "Sensor cadastrado com sucesso!");
-        } catch (IllegalArgumentException ex) {
-            // Exibe erro de negócio (por exemplo, código duplicado)
-            result.rejectValue("codigo", "error.sensorForm", ex.getMessage());
-            model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
-            return "formulario_sensor";
-        }
-
+        sensorService.salvar(formDto);
         return "redirect:/admin/sensores";
     }
 
     /**
-     * Abre o formulário para editar um sensor existente.
+     * 4) GET  /admin/sensores/editar/{id}
+     *    => Carrega o sensor existente no formulário para edição (formulario_sensor.html).
+     *    => No model, adiciona:
+     *         • “sensorForm”     → SensorFormDTO preenchido com dados do sensor
+     *         • “idSensor”       → o ID do sensor (para que o template saiba exibir o botão “Atualizar”)
+     *         • “corregos”       → lista de CorregoView (para popular o <select>)
      */
     @GetMapping("/editar/{id}")
-    public String abrirEditar(@PathVariable("id") Long id,
-                              Model model,
-                              RedirectAttributes redirect) {
-        // Agora buscarPorId retorna Optional<SensorView>
-        SensorView view = sensorService.buscarPorId(id)
-                .orElse(null);
-
-        if (view == null) {
-            redirect.addFlashAttribute("erro", "Sensor não encontrado.");
+    public String exibirFormularioEdicao(
+            @PathVariable("id") Long id,
+            Model model
+    ) {
+        var optView = sensorService.buscarPorId(id);
+        if (optView.isEmpty()) {
+            // Se não encontrar, redireciona de volta para a lista
             return "redirect:/admin/sensores";
         }
 
-        // Preenche o SensorFormDTO com os dados de SensorView
-        SensorFormDTO dto = new SensorFormDTO();
-        dto.setCodigo(view.codigo());
-        dto.setDataInstalacao(view.dataInstalacao());
-        dto.setStatus(view.status());
-        dto.setIdCorrego(view.idCorrego());
+        SensorView s = optView.get();
+        // Monta o DTO de edição usando os valores do SensorView:
+        SensorFormDTO form = new SensorFormDTO();
+        form.setCodigo(s.codigo());
+        form.setDataInstalacao(s.dataInstalacao());
+        form.setStatus(s.status());
+        form.setIdCorrego(s.idCorrego());
+        // (caso tenha mais campos no SensorFormDTO, preencha aqui)
 
-        model.addAttribute("sensorForm", dto);
-        model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
+        model.addAttribute("sensorForm", form);
         model.addAttribute("idSensor", id);
+
+        List<CorregoView> listaCorregos = corregoService.listarTodos();
+        model.addAttribute("corregos", listaCorregos);
+
         return "formulario_sensor";
     }
 
     /**
-     * Recebe o POST para atualizar um sensor.
+     * 5) POST /admin/sensores/editar/{id}
+     *    => Recebe o SensorFormDTO do formulário de edição, valida e atualiza.
+     *    => Se houver erros, volta ao formulário de edição;
+     *    => Senão, redireciona para a lista de sensores.
      */
     @PostMapping("/editar/{id}")
-    public String atualizar(@PathVariable("id") Long id,
-                            @Valid @ModelAttribute("sensorForm") SensorFormDTO dto,
-                            BindingResult result,
-                            RedirectAttributes redirect,
-                            Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
+    public String atualizarSensor(
+            @PathVariable("id") Long id,
+            @Valid @ModelAttribute("sensorForm") SensorFormDTO formDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("idSensor", id);
+            List<CorregoView> listaCorregos = corregoService.listarTodos();
+            model.addAttribute("corregos", listaCorregos);
             return "formulario_sensor";
         }
 
-        try {
-            sensorService.atualizarSensor(id, dto);
-            redirect.addFlashAttribute("sucesso", "Sensor atualizado com sucesso!");
-        } catch (IllegalArgumentException ex) {
-            result.rejectValue("codigo", "error.sensorForm", ex.getMessage());
-            model.addAttribute("corregos", sensorService.listarCorregosDisponiveis());
-            return "formulario_sensor";
-        }
-
+        sensorService.atualizar(id, formDto);
         return "redirect:/admin/sensores";
     }
 
     /**
-     * Remove um sensor pelo ID.
+     * 6) GET /admin/sensores/remover/{id}
+     *    => Remove o sensor e redireciona para a lista de sensores.
      */
     @GetMapping("/remover/{id}")
-    public String remover(@PathVariable("id") Long id, RedirectAttributes redirect) {
-        try {
-            sensorService.deletarPorId(id);
-            redirect.addFlashAttribute("sucesso", "Sensor removido com sucesso!");
-        } catch (IllegalArgumentException ex) {
-            redirect.addFlashAttribute("erro", ex.getMessage());
-        }
+    public String removerSensor(@PathVariable("id") Long id) {
+        sensorService.deletarPorId(id);
         return "redirect:/admin/sensores";
     }
+
 }

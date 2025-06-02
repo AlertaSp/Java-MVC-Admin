@@ -1,19 +1,23 @@
 package com.alerta_sp.mvc_admin.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
+@Table(name = "corrego")
 public class Corrego {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_corrego")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Column(name = "latitude")
     private String latitude;
+
+    @Column(name = "longitude")
     private String longitude;
 
     @Column(name = "nivel_alerta")
@@ -22,12 +26,7 @@ public class Corrego {
     @Column(name = "nivel_critico")
     private Double nivelCritico;
 
-    @OneToMany(mappedBy = "corrego", cascade = CascadeType.ALL)
-    private List<Sensor> sensores;
-
-    public Corrego() {}
-
-    // Getters e setters
+    // getters e setters omitidos
     public Long getId() { return id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
@@ -39,6 +38,4 @@ public class Corrego {
     public void setNivelAlerta(Double nivelAlerta) { this.nivelAlerta = nivelAlerta; }
     public Double getNivelCritico() { return nivelCritico; }
     public void setNivelCritico(Double nivelCritico) { this.nivelCritico = nivelCritico; }
-    public List<Sensor> getSensores() { return sensores; }
-    public void setSensores(List<Sensor> sensores) { this.sensores = sensores; }
 }

@@ -60,7 +60,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         Administrador admin = administradorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Administrador não encontrado."));
 
-        // Atualiza username (verificando duplicidade) e senha, se fornecida
+        // Atualiza username e, se fornecida, a senha
         if (!admin.getUsername().equals(dto.getUsername())) {
             if (administradorRepository.existsByUsername(dto.getUsername())) {
                 throw new IllegalArgumentException("Username já em uso.");

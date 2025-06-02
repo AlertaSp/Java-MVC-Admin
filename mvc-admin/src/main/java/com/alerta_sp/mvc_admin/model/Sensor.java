@@ -4,17 +4,21 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "sensor")
 public class Sensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_sensor")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
 
+    @Column(name = "data_instalacao")
     private LocalDate dataInstalacao;
 
+    @Column(name = "status")
     private String status = "ATIVO";
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +33,8 @@ public class Sensor {
         this.corrego = corrego;
     }
 
-    // Getters e setters
+    // getters e setters
+
     public Long getId() { return id; }
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }

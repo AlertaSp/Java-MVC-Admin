@@ -50,17 +50,18 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         // A página de login ainda é “/home”
                         .loginPage("/home")
-                )
-        ;
+                );
 
         return http.build();
     }
 
     /**
      * BCryptPasswordEncoder para codificar as senhas.
+     * Como retornamos diretamente um BCryptPasswordEncoder, o Spring
+     * irá registrar um bean também do tipo BCryptPasswordEncoder.
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -71,6 +72,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         var admin = User.builder()
                 .username("admin")
+                // senha “admin123” já criptografada:
                 .password("$2a$12$jf7otcC9kvkOrrCGmUFkvebdyjmgvcNPVElwJshtIsdWZkC6X2ZVa")
                 .roles("ADMIN")
                 .build();

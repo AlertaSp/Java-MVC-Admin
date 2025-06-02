@@ -4,27 +4,22 @@ import com.alerta_sp.mvc_admin.model.Sensor;
 
 import java.time.LocalDate;
 
-/**
- * DTO de saída (view) para representar um Sensor na lista, na tela.
- */
 public record SensorView(
         Long id,
         String codigo,
         LocalDate dataInstalacao,
         String status,
-        Long idCorrego
+        Long idCorrego,
+        String nomeCorrego
 ) {
-    /**
-     * Converte uma entidade Sensor em SensorView.
-     */
-    public static SensorView fromEntity(Sensor sensor) {
+    public static SensorView fromEntity(Sensor s) {
         return new SensorView(
-                sensor.getId(),
-                sensor.getCodigo(),
-                sensor.getDataInstalacao(),
-                sensor.getStatus(),
-                // pega o ID do córrego associado
-                sensor.getCorrego().getId()
+                s.getId(),
+                s.getCodigo(),
+                s.getDataInstalacao(),
+                s.getStatus(),
+                s.getCorrego().getId(),
+                s.getCorrego().getNome()
         );
     }
 }

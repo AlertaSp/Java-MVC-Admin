@@ -4,29 +4,34 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "leitura_sensor")
 public class LeituraSensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_leitura")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sensor", nullable = false)
     private Sensor sensor;
 
-    @Column(nullable = false)
+    @Column(name = "nivel")
     private Double nivel;
 
+    @Column(name = "data_hora")
     private LocalDateTime dataHora = LocalDateTime.now();
 
     public LeituraSensor() {}
 
-    public LeituraSensor(Sensor sensor, Double nivel) {
-        this.sensor = sensor;
+    public LeituraSensor(Double nivel, Sensor sensor) {
         this.nivel = nivel;
+        this.sensor = sensor;
+        this.dataHora = LocalDateTime.now();
     }
 
-    // Getters e setters
+    // getters e setters
+
     public Long getId() { return id; }
     public Sensor getSensor() { return sensor; }
     public void setSensor(Sensor sensor) { this.sensor = sensor; }

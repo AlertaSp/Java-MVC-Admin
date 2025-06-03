@@ -117,7 +117,7 @@
         <tr th:each="alerta : ${alertas}">
             <td th:text="${alerta.dataHora}">2025-05-25 14:00</td>
             <td th:text="${alerta.corrego?.nome}">Córrego A</td>
-            <td th:text="${alerta.tipo != null} ? #{'alertas.tipo.' + alerta.tipo.name().toLowerCase()} : 'Tipo indefinido'">Crítico</td>
+            <td th:text="${alerta.tipo != null} ? #{'alertas.tipo.' + alerta.tipo.name().toLowerCase()} : #{alertas.tipo.indefinido}">Tipo indefinido</td>
             <td th:text="${alerta.resolvido} ? #{alertas.resolvido} : #{alertas.pendente}">Pendente</td>
             <td>
                 <div class="btn-group">
@@ -127,7 +127,7 @@
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(alertas)}">
-            <td colspan="5" style="text-align: center;">Nenhum alerta encontrado.</td>
+            <td colspan="5" style="text-align: center;" th:text="#{alertas.nenhumEncontrado}">Nenhum alerta encontrado.</td>
         </tr>
         </tbody>
     </table>

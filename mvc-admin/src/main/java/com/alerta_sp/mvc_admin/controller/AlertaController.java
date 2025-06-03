@@ -1,8 +1,9 @@
 package com.alerta_sp.mvc_admin.controller;
 
+import com.alerta_sp.mvc_admin.dto.AlertaDTO;
 import com.alerta_sp.mvc_admin.dto.AlertaView;
+import com.alerta_sp.mvc_admin.messaging.AlertaProducer;
 import com.alerta_sp.mvc_admin.service.AlertaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,31 +15,30 @@ import java.util.List;
 public class AlertaController {
 
     private final AlertaService alertaService;
+    private final AlertaProducer alertaProducer;
 
-    @Autowired
-    public AlertaController(AlertaService alertaService) {
+    public AlertaController(AlertaService alertaService, AlertaProducer alertaProducer) {
         this.alertaService = alertaService;
+        this.alertaProducer = alertaProducer;
     }
 
     @GetMapping
     public String listarAlertas(Model model) {
-        // Aqui estou pegando os 50 mais recentes, ajuste conforme seu contexto
         List<AlertaView> alertas = alertaService.listarUltimosAlertas(50);
         model.addAttribute("alertas", alertas);
         return "alertas";
     }
 
-    @GetMapping("/{id}")
-    public String verDetalhes(@PathVariable Long id, Model model) {
-        // TODO: implementar buscarPorId ou similar no serviço
-        model.addAttribute("alerta", new AlertaView(id, "Detalhes fictícios ainda não implementados."));
-        return "detalhe_alerta"; // futura página de detalhes
+    @GetMapping("/emitir")
+    public String exibirFormularioEmitir(Model model) {
+        model.addAttribute("alertaDTO", new AlertaDTO());
+        return "emitir_alerta";
     }
 
-    @GetMapping("/encerrar/{id}")
-    public String encerrarAlerta(@PathVariable Long id) {
-        // TODO: implementar lógica de encerramento no serviço
-        System.out.println("Encerrando alerta ID: " + id); // placeholder
+    @PostMapping("/emitir")
+    public String emitirAlerta(@ModelAttribute AlertaDTO alertaDTO) {
+        alertaService.salvar(alertaDTO); // opcional
+        alertaProducer.enviarAlerta(alertaDTO);
         return "redirect:/admin/alertas";
     }
 }

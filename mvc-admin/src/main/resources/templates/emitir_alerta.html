@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{alertas.emitir.titulo}">Emitir Alerta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #1e3c72;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-bar a {
+            color: #fff;
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-voltar {
+            margin-left: 1rem;
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{alertas.emitir.titulo}">Emitir Alerta</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <form th:action="@{/admin/alertas/emitir}" method="post" th:object="${alertaDTO}">
+        <label th:for="mensagem" th:text="#{alertas.emitir.mensagem}">Mensagem</label>
+        <textarea th:field="*{mensagem}" rows="4" required></textarea>
+
+        <label th:for="corrego" th:text="#{alertas.emitir.corrego}">Córrego</label>
+        <input type="text" th:field="*{corrego}" required/>
+
+        <label th:for="nivel" th:text="#{alertas.emitir.nivel}">Nível</label>
+        <select th:field="*{nivel}" required>
+            <option value="" th:text="#{alertas.emitir.selecione}" disabled selected>Selecione</option>
+            <option value="ALERTA" th:text="#{alertas.emitir.alerta}">Alerta</option>
+            <option value="CRITICO" th:text="#{alertas.emitir.critico}">Crítico</option>
+        </select>
+
+        <button type="submit" class="btn" th:text="#{alertas.emitir.enviar}">Enviar</button>
+        <a th:href="@{/admin/alertas}" class="btn btn-voltar" th:text="#{alertas.voltar}">Voltar</a>
+    </form>
+</div>
+</body>
+</html>

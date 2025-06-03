@@ -169,13 +169,13 @@
     <h1 th:text="#{dashboard.titulo}">Dashboard - Alerta SP</h1>
   </div>
   <nav id="menu">
-    <!-- Apontando para as rotas que você já implementou no controller -->
-    <a th:href="@{/admin/dashboard}"    th:text="#{menu.dashboard}">Dashboard</a>
-    <a th:href="@{/admin/corregos}"     th:text="#{menu.corregos}">Córregos</a>
-    <a th:href="@{/admin/sensores}"     th:text="#{menu.sensores}">Sensores</a>
-    <a th:href="@{/admin/leituras}"     th:text="#{menu.leituras}">Leituras</a>
-    <a th:href="@{/admin/alertas}"      th:text="#{menu.alertas}">Alertas</a>
-    <a th:href="@{/admin/configuracoes}"th:text="#{menu.configuracoes}">Configurações</a>
+    <a th:href="@{/admin/dashboard}"     th:text="#{menu.dashboard}">Dashboard</a>
+    <a th:href="@{/admin/corregos}"      th:text="#{menu.corregos}">Córregos</a>
+    <a th:href="@{/admin/sensores}"      th:text="#{menu.sensores}">Sensores</a>
+    <a th:href="@{/admin/leituras}"      th:text="#{menu.leituras}">Leituras</a>
+    <a th:href="@{/admin/alertas}"       th:text="#{menu.alertas}">Alertas</a>
+    <a th:href="@{/admin/alertas/emitir}"th:text="#{menu.emitirAlerta}">Emitir Alerta</a> <!-- NOVO -->
+    <a th:href="@{/admin/configuracoes}" th:text="#{menu.configuracoes}">Configurações</a>
   </nav>
   <div class="language-bar">
     🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |

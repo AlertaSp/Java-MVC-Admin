@@ -46,10 +46,9 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/home?logout")
                         .permitAll()
                 )
-                // Caso você utilize OAuth2 (ex.: “Entrar com GitHub”), inclui essa parte:
                 .oauth2Login(oauth2 -> oauth2
-                        // A página de login ainda é “/home”
                         .loginPage("/home")
+                        .defaultSuccessUrl("/admin/dashboard", true)
                 );
 
         return http.build();

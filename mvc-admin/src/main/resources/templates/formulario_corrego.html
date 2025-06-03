@@ -96,33 +96,32 @@
 </header>
 
 <div class="container">
-    <form th:action="@{/admin/corregos/salvar}" method="post" th:object="${corrego}">
+    <form th:action="@{/admin/corregos}" method="post" th:object="${corregoForm}">
         <label for="nome" th:text="#{corregos.nome}">Nome</label>
-        <input type="text" id="nome" th:field="*{corregos.nome}" required>
-        <div class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{corregos.nome}"></div>
+        <input type="text" id="nome" th:field="*{nome}" required>
+        <div class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
 
         <label for="latitude" th:text="#{corregos.latitude}">Latitude</label>
-        <input type="text" id="latitude" th:field="*{corregos.latitude}" required>
-        <div class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{corregos.latitude}"></div>
+        <input type="text" id="latitude" th:field="*{latitude}" required>
+        <div class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}"></div>
 
         <label for="longitude" th:text="#{corregos.longitude}">Longitude</label>
-        <input type="text" id="longitude" th:field="*{corregos.longitude}" required>
-        <div class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{corregos.longitude}"></div>
+        <input type="text" id="longitude" th:field="*{longitude}" required>
+        <div class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}"></div>
 
-        <label th:text="#{corregos.nivelAlerta}">Nível de Alerta</label>
-        <input type="number" min="0" step="0.01" th:field="*{corregos.nivelAlerta}" required>
-        <div class="error" th:if="${#fields.hasErrors('nivelAlerta')}" th:errors="*{corregos.nivelAlerta}"></div>
+        <label for="nivelAlerta" th:text="#{corregos.nivelAlerta}">Nível de Alerta</label>
+        <input type="number" id="nivelAlerta" min="0" step="0.01" th:field="*{nivelAlerta}" required>
+        <div class="error" th:if="${#fields.hasErrors('nivelAlerta')}" th:errors="*{nivelAlerta}"></div>
 
-        <label th:text="#{corregos.nivelCritico}">Nível Crítico</label>
-        <input type="number" min="0" step="0.01" th:field="*{corregos.nivelCritico}" required>
-        <div class="error" th:if="${#fields.hasErrors('nivelCritico')}" th:errors="*{corregos.nivelCritico}"></div>
+        <label for="nivelCritico" th:text="#{corregos.nivelCritico}">Nível Crítico</label>
+        <input type="number" id="nivelCritico" min="0" step="0.01" th:field="*{nivelCritico}" required>
+        <div class="error" th:if="${#fields.hasErrors('nivelCritico')}" th:errors="*{nivelCritico}"></div>
 
         <div class="btn-container">
             <button type="submit" class="btn btn-salvar" th:text="#{corregos.salvar}">Salvar</button>
-            <a th:href="@{/admin/dashboard}" class="btn btn-cancelar" th:text="#{corregos.cancelar}">Cancelar</a>
+            <a th:href="@{/admin/corregos}" class="btn btn-cancelar" th:text="#{corregos.cancelar}">Cancelar</a>
         </div>
     </form>
-
 </div>
 </body>
 </html>

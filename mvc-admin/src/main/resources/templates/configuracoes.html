@@ -36,22 +36,24 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            margin-bottom: 1.5rem;
-        }
-
         label {
             display: block;
             margin-top: 1rem;
             font-weight: bold;
         }
 
-        input[type="text"], input[type="email"] {
+        input[type="text"], input[type="email"], textarea {
             width: 100%;
             padding: 0.6rem;
             margin-top: 0.3rem;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
         }
 
         .checkbox-group {
@@ -67,6 +69,7 @@
         .btn-container {
             margin-top: 2rem;
             display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
@@ -82,6 +85,16 @@
 
         .btn-salvar { background-color: #28a745; }
         .btn-voltar { background-color: #6c757d; }
+        .btn-explicar { background-color: #007bff; }
+
+        .resultado-ia {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #eef2f7;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
@@ -97,15 +110,15 @@
 <div class="container">
     <form th:action="@{/config/salvar}" method="post" th:object="${config}">
         <label for="apiKey" th:text="#{config.apiKey}">API Key da Spring AI</label>
-        <input type="text" id="apiKey" th:field="*{config.apiKey}" required>
+        <input type="text" id="apiKey" th:field="*{apiKey}" required>
 
         <label for="parametro" th:text="#{config.parametros}">Parâmetros do Sistema</label>
-        <input type="text" id="parametro" th:field="*{config.parametros}" required>
+        <input type="text" id="parametro" th:field="*{parametros}" required>
 
         <label th:text="#{config.notificacoes}">Notificações</label>
         <div class="checkbox-group">
-            <label><input type="checkbox" th:field="*{config.emailNotificacao}"> Email</label>
-            <label><input type="checkbox" th:field="*{config.pushNotificacao}"> Push</label>
+            <label><input type="checkbox" th:field="*{emailNotificacao}"> Email</label>
+            <label><input type="checkbox" th:field="*{pushNotificacao}"> Push</label>
         </div>
 
         <div class="btn-container">
@@ -113,6 +126,36 @@
             <a th:href="@{/dashboard}" class="btn btn-voltar" th:text="#{config.voltar}">Voltar</a>
         </div>
     </form>
+
+    <hr style="margin: 2rem 0;">
+
+    <label for="inputParametros">Deseja entender os parâmetros?</label>
+    <textarea id="inputParametros" placeholder="Ex: timeout=3000\nretries=5"></textarea>
+    <button class="btn btn-explicar" onclick="explicarParametros()">Explicar Parâmetros</button>
+
+    <div id="resultadoIA" class="resultado-ia" style="display:none;"></div>
 </div>
+
+<script>
+    async function explicarParametros() {
+        const input = document.getElementById('inputParametros').value;
+        const resultadoDiv = document.getElementById('resultadoIA');
+        resultadoDiv.style.display = 'block';
+        resultadoDiv.textContent = 'Processando...';
+
+        const response = await fetch('/config/explicar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: input
+        });
+
+        if (response.ok) {
+            const texto = await response.text();
+            resultadoDiv.textContent = texto;
+        } else {
+            resultadoDiv.textContent = 'Erro ao comunicar com o assistente.';
+        }
+    }
+</script>
 </body>
 </html>

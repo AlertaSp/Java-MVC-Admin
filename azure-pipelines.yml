@@ -34,7 +34,7 @@ stages:
       steps:
         - task: AzureCLI@2
           inputs:
-            azureSubscription: 'Azure for Students(035f5616-432c-454b-b3f6-52a1f6a8b17b)'
+            azureSubscription: 'Azure for Students (035f5616-432c-454b-b3f6-52a1f6a8b17b)'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
@@ -95,7 +95,7 @@ stages:
         - task: AzureRmWebAppDeployment@4
           displayName: 'Deploy alertaSP JAR'
           inputs:
-            azureSubscription: 'Azure for Students(035f5616-432c-454b-b3f6-52a1f6a8b17b)'
+            azureSubscription: 'Azure for Students (035f5616-432c-454b-b3f6-52a1f6a8b17b)'
             appType: 'webAppLinux'
             WebAppName: $(app-name)
             packageForLinux: '$(System.DefaultWorkingDirectory)/$(nome-artefato)/**/*.jar'

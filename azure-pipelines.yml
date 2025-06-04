@@ -1,0 +1,101 @@
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  - name: rm
+    value: rm553568
+  - name: location
+    value: brazilsouth
+  - name: resourceGroup
+    value: alertaSP-Java-rm553568-rg
+  - name: service-plan
+    value: asp-alertaSP-Java-rm553568
+  - name: app-name
+    value: alertaSP-Java-rm553568
+  - name: runtime
+    value: JAVA|17-java17
+  - name: sku
+    value: F1
+  - name: nome-artefato
+    value: alertaSP
+
+stages:
+# -------------------- INFRA -----------------------
+- stage: CriarInfra
+  jobs:
+    - job: criaWebApp
+      displayName: Criar ou atualizar o Serviço de Aplicativo
+      steps:
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'Azure for Students (035f5616-432c-454b-b3f6-52a1f6a8b17b)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              echo "Criando Resource Group (se necessário)..."
+              az group create --location $(location) --name $(resourceGroup)
+
+              echo "Criando App Service Plan (se necessário)..."
+              az appservice plan create -g $(resourceGroup) -n $(service-plan) --is-linux --sku $(sku) || true
+
+              echo "Criando Web App (se necessário)..."
+              az webapp create -g $(resourceGroup) -p $(service-plan) -n $(app-name) --runtime "$(runtime)" || true
+          displayName: 'Criar WebApp Linux com Java 17'
+
+# -------------------- BUILD -----------------------
+- stage: BuildApp
+  jobs:
+    - job: buildWebApp
+      displayName: Realizar o Build da aplicação
+      steps:
+        - task: Maven@4
+          displayName: 'Build alertaSP'
+          inputs:
+            mavenPomFile: 'mvc-admin/pom.xml'
+            mavenOptions: '-Xmx3072m'
+            jdkVersionOption: 1.17
+            goals: 'package'
+            publishJUnitResults: true
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+
+        - task: CopyFiles@2
+          displayName: 'Copiar JAR gerado'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)/mvc-admin'
+            Contents: '**/target/*.jar'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publicar artefato alertaSP'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: $(nome-artefato)
+
+# -------------------- DEPLOY -----------------------
+- stage: DeployApp
+  dependsOn: BuildApp
+  jobs:
+    - job: DeployWebApp
+      displayName: Realizar Deploy no Azure App Service
+      steps:
+        - task: DownloadBuildArtifacts@1
+          displayName: 'Baixar artefato gerado'
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: '$(nome-artefato)'
+            downloadPath: '$(System.DefaultWorkingDirectory)/$(nome-artefato)'
+
+        - task: AzureRmWebAppDeployment@4
+          displayName: 'Deploy alertaSP JAR'
+          inputs:
+            azureSubscription: 'Azure for Students (035f5616-432c-454b-b3f6-52a1f6a8b17b)'
+            appType: 'webAppLinux'
+            WebAppName: $(app-name)
+            packageForLinux: '$(System.DefaultWorkingDirectory)/$(nome-artefato)/**/*.jar'

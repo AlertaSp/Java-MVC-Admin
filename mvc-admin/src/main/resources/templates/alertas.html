@@ -116,8 +116,8 @@
         <tbody>
         <tr th:each="alerta : ${alertas}">
             <td th:text="${alerta.dataHora}">2025-05-25 14:00</td>
-            <td th:text="${alerta.corrego?.nome}">Córrego A</td>
-            <td th:text="${alerta.tipo != null} ? #{'alertas.tipo.' + alerta.tipo.name().toLowerCase()} : #{alertas.tipo.indefinido}">Tipo indefinido</td>
+            <td th:text="${alerta.corrego}">Córrego</td> <!-- CORRETO -->
+            <td th:text="${alerta.tipoDescricao}">Tipo indefinido</td>
             <td th:text="${alerta.resolvido} ? #{alertas.resolvido} : #{alertas.pendente}">Pendente</td>
             <td>
                 <div class="btn-group">

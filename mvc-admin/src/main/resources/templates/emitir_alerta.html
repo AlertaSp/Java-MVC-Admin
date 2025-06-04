@@ -81,8 +81,13 @@
         <label th:for="mensagem" th:text="#{alertas.emitir.mensagem}">Mensagem</label>
         <textarea th:field="*{mensagem}" rows="4" required></textarea>
 
-        <label th:for="corrego" th:text="#{alertas.emitir.corrego}">Córrego</label>
-        <input type="text" th:field="*{corrego}" required/>
+        <label th:for="idCorrego" th:text="#{alertas.emitir.corrego}">Córrego</label>
+        <select th:field="*{idCorrego}" required>
+            <option value="" disabled selected th:text="#{form.selecioneCorrego}">Selecione</option>
+            <option th:each="corrego : ${corregos}"
+                    th:value="${corrego.id}"
+                    th:text="${corrego.nome}">Córrego X</option>
+        </select>
 
         <label th:for="nivel" th:text="#{alertas.emitir.nivel}">Nível</label>
         <select th:field="*{nivel}" required>

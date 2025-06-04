@@ -2,22 +2,28 @@ package com.alerta_sp.mvc_admin.dto;
 
 import java.io.Serializable;
 
-public class AlertaDTO implements Serializable {
+/**
+ * DTO utilizado para transferência de dados de alerta entre sistemas.
+ */
+public class AlertaMensagemDTO implements Serializable {
 
-    /** ID de versão para serialização */
     private static final long serialVersionUID = 1L;
 
-    /** Mensagem do alerta */
     private String mensagem;
-
-    /** Nível do alerta: ALERTA ou CRITICO */
     private String nivel;
-
-    /** Nome do córrego (usado para exibição) */
     private String corrego;
-
-    /** ID do córrego (usado para persistência) */
     private Long idCorrego;
+
+    // Construtor padrão
+    public AlertaMensagemDTO() {}
+
+    // Construtor completo
+    public AlertaMensagemDTO(String mensagem, String nivel, String corrego, Long idCorrego) {
+        this.mensagem = mensagem;
+        this.nivel = nivel;
+        this.corrego = corrego;
+        this.idCorrego = idCorrego;
+    }
 
     // Getters e Setters
 
@@ -51,5 +57,15 @@ public class AlertaDTO implements Serializable {
 
     public void setIdCorrego(Long idCorrego) {
         this.idCorrego = idCorrego;
+    }
+
+    @Override
+    public String toString() {
+        return "AlertaMensagemDTO{" +
+                "mensagem='" + mensagem + '\'' +
+                ", nivel='" + nivel + '\'' +
+                ", corrego='" + corrego + '\'' +
+                ", idCorrego=" + idCorrego +
+                '}';
     }
 }

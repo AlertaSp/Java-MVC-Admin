@@ -57,7 +57,7 @@ stages:
         - task: Maven@4
           displayName: 'Build alertaSP'
           inputs:
-            mavenPomFile: 'pom.xml'
+            mavenPomFile: 'mvc-admin/pom.xml'
             mavenOptions: '-Xmx3072m'
             jdkVersionOption: 1.17
             goals: 'package'
@@ -67,7 +67,7 @@ stages:
         - task: CopyFiles@2
           displayName: 'Copiar JAR gerado'
           inputs:
-            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            SourceFolder: '$(System.DefaultWorkingDirectory)/mvc-admin'
             Contents: '**/target/*.jar'
             TargetFolder: '$(Build.ArtifactStagingDirectory)'
 

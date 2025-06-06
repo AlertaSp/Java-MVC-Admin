@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
@@ -47,11 +48,11 @@ class SensorServiceImplTest {
         dto.setIdCorrego(1L);
 
         Corrego corrego = new Corrego();
-        corrego.setId(1L);
+        ReflectionTestUtils.setField(corrego, "id", 1L);
         when(corregoRepository.findById(1L)).thenReturn(Optional.of(corrego));
 
         Sensor saved = new Sensor();
-        saved.setId(10L);
+        ReflectionTestUtils.setField(saved, "id", 10L);
         saved.setCodigo("S1");
         saved.setCorrego(corrego);
         when(sensorRepository.save(any(Sensor.class))).thenReturn(saved);

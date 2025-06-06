@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ class AdministradorServiceImplTest {
         when(passwordEncoder.encode("abc")).thenReturn("enc");
 
         Administrador saved = new Administrador();
-        saved.setId(1L);
+        ReflectionTestUtils.setField(saved, "id", 1L);
         saved.setUsername("novo");
         saved.setSenha("enc");
         when(administradorRepository.save(any(Administrador.class))).thenReturn(saved);

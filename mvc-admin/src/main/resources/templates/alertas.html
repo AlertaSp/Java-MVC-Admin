@@ -65,8 +65,10 @@
             text-align: center;
         }
 
-        .btn-encerrar { background-color: #28a745; color: white; }
-        .btn-detalhes { background-color: #007bff; color: white; }
+        .btn-encerrar {
+            background-color: #dc3545; /* vermelho Bootstrap */
+            color: white;
+        }
 
         .btn-voltar {
             background-color: #6c757d;
@@ -121,11 +123,15 @@
             <td th:text="${alerta.resolvido} ? #{alertas.resolvido} : #{alertas.pendente}">Pendente</td>
             <td>
                 <div class="btn-group">
-                    <a th:if="${!alerta.resolvido}" th:href="@{/alertas/encerrar/{id}(id=${alerta.id})}" class="btn btn-encerrar" th:text="#{alertas.encerrar}">Encerrar Alerta</a>
-                    <a th:href="@{/alertas/{id}(id=${alerta.id})}" class="btn btn-detalhes" th:text="#{alertas.detalhes}">Ver Detalhes</a>
+                    <a th:if="${!alerta.resolvido}"
+                       th:href="@{/alertas/encerrar/{id}(id=${alerta.id})}"
+                       class="btn btn-encerrar"
+                       th:onclick="'return confirm(\'' + #{alertas.confirmacao} + '\')'"
+                       th:text="#{alertas.encerrar}">
+                        Encerrar Alerta
+                    </a>
                 </div>
             </td>
-        </tr>
         <tr th:if="${#lists.isEmpty(alertas)}">
             <td colspan="5" style="text-align: center;" th:text="#{alertas.nenhumEncontrado}">Nenhum alerta encontrado.</td>
         </tr>

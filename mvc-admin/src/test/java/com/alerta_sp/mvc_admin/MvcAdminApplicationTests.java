@@ -2,21 +2,14 @@ package com.alerta_sp.mvc_admin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb",
-        "spring.datasource.driver-class-name=org.h2.Driver",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect"
-})
+@SpringBootTest
+@ActiveProfiles("test") // Usa o application-test.properties
 class MvcAdminApplicationTests {
-
-    @MockBean
-    private ChatModel chatModel;
 
     @Test
     void contextLoads() {
+        // Verifica apenas se o contexto Spring carrega com sucesso
     }
 }

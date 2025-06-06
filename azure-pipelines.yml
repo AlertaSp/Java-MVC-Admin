@@ -46,6 +46,12 @@ stages:
 
               echo "Criando Web App (se necessário)..."
               az webapp create -g $(resourceGroup) -p $(service-plan) -n $(app-name) --runtime "$(runtime)" || true
+
+              echo "Configurando variável de ambiente PORT=8080 (necessário para apps Spring Boot no App Service)..."
+              az webapp config appsettings set \
+                --name $(app-name) \
+                --resource-group $(resourceGroup) \
+                --settings PORT=8080
           displayName: 'Criar WebApp Linux com Java 17'
 
 # -------------------- BUILD -----------------------

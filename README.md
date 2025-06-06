@@ -105,5 +105,22 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
    http://localhost:8080/admin
    ```
 
+## 🧪 Testes Unitários e de Integração
 
+Este projeto conta com uma suíte de testes criada com o **Spring Boot Test** e
+o banco de dados em memória **H2**. Eles servem para garantir que as regras de
+negócio e as operações dos repositórios estejam funcionando corretamente sem a
+necessidade de acessar o MySQL real.
+
+* **Testes unitários** – utilizam o Mockito para simular dependências das
+  classes de serviço, verificando comportamentos como validações e tratamento de
+  erros.
+* **Testes de integração** – executados com o H2 apenas durante os testes,
+  validam consultas e persistência nos repositórios de forma isolada.
+
+Para rodar todos os testes, basta executar:
+
+```bash
+mvn test
+```
 

@@ -15,7 +15,7 @@
 
 ## 📌 Descrição Geral
 
-O **Alerta SP** é um sistema inteligente de monitoramento em tempo real, focado na prevenção e alerta sobre enchentes e desastres naturais. Este projeto utiliza tecnologia IoT, integrando sensores em áreas críticas para fornecer notificações rápidas e precisas.
+O **Alerta SP** é um sistema inteligente de monitoramento em tempo real, focado na prevenção e alerta sobre enchentes e desastres naturais. Utiliza sensores IoT instalados em áreas de risco para coletar dados de nível dos córregos e gerar alertas em caso de perigo. O painel administrativo em Java permite acompanhar as leituras, registrar valores manualmente e gerar relatórios automatizados com auxílio de IA.
 
 ## 🚀 Papel do Java no Projeto
 
@@ -27,7 +27,7 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
 * ✅ Segurança robusta com autenticação via OAuth2 (GitHub).
 * ✅ Gestão das regras de negócio (córregos, sensores, alertas).
 
-## 📌 Próximas Atualizações
+## 📌 Links Importantes 
 
 * 🔜 Diagrama UML (\[adicionar link aqui])
 * 🎥 Vídeo de Explicação (\[adicionar link aqui])
@@ -44,9 +44,11 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
 
     * Vinculação dos sensores físicos aos córregos cadastrados
 
-* 📊 **Visualizar Leituras**:
+* 📊 **Visualizar e Registrar Leituras**:
 
-    * Gráficos e relatórios com tendências e alertas
+    * Consulta das últimas medições de cada sensor
+    * Registro manual de leituras para testes ou ajustes
+    * Gráficos com tendências de níveis e alertas
 
 * 🚨 **Emitir Alertas**:
 
@@ -56,9 +58,9 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
 
     * Status de RabbitMQ e serviços de inteligência artificial (Spring AI)
 
-* ⚙️ **Configurações Avançadas**:
+* 🧠 **Gerar Relatórios com IA**:
 
-    * Ajustes e parametrizações específicas do sistema
+    * Síntese automatizada das últimas leituras usando Spring AI
 
 ## 🔑 Tecnologias Utilizadas
 
@@ -85,21 +87,7 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
    git clone <link_do_repositório>
    ```
 
-2. Configure o banco de dados no arquivo `application.properties`:
-
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/alerta_sp
-   spring.datasource.username=root
-   spring.datasource.password=sua_senha
-   ```
-
-3. Execute o projeto via Maven:
-
-   ```bash
-   mvn spring-boot:run
-   ```
-
-4. Acesse o sistema:
+2. Acesse o sistema:
 
    ```
    http://localhost:8080/admin

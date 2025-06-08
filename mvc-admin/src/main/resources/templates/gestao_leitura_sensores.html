@@ -69,6 +69,18 @@
             margin-top: 2rem;
         }
 
+        .btn-novo {
+            background-color: #28a745;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
         .btn-voltar {
             background-color: #6c757d;
             color: white;
@@ -118,6 +130,8 @@
     </form>
 
     <canvas id="graficoLeituras" height="100"></canvas>
+
+    <a th:href="@{/admin/leitura/novo}" class="btn-novo" th:text="#{leituras.novo}">Nova Leitura</a>
 
     <a th:href="@{/admin/dashboard}" class="btn-voltar" th:text="#{leituras.voltar}">Voltar</a>
 </div>

@@ -57,7 +57,7 @@ public class SensorController {
         model.addAttribute("sensorForm", new SensorFormDTO());
         List<CorregoView> listaCorregos = corregoService.listarTodos();
         model.addAttribute("corregos", listaCorregos);
-        return "formulario_sensor";
+        return "formulario_sensores";
     }
 
     /**
@@ -76,7 +76,7 @@ public class SensorController {
         if (bindingResult.hasErrors()) {
             List<CorregoView> listaCorregos = corregoService.listarTodos();
             model.addAttribute("corregos", listaCorregos);
-            return "formulario_sensor";
+            return "formulario_sensores";
         }
 
         sensorService.salvar(formDto);
@@ -117,7 +117,7 @@ public class SensorController {
         List<CorregoView> listaCorregos = corregoService.listarTodos();
         model.addAttribute("corregos", listaCorregos);
 
-        return "formulario_sensor";
+        return "formulario_sensores";
     }
 
     /**
@@ -137,7 +137,7 @@ public class SensorController {
             model.addAttribute("idSensor", id);
             List<CorregoView> listaCorregos = corregoService.listarTodos();
             model.addAttribute("corregos", listaCorregos);
-            return "formulario_sensor";
+            return "formulario_sensores";
         }
 
         sensorService.atualizar(id, formDto);

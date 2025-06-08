@@ -10,6 +10,8 @@ public class CorregoFormDTO {
     private String latitude;
     private String longitude;
 
+    private Double nivelAtual;
+
     @NotNull
     private Double nivelAlerta;
 
@@ -40,6 +42,14 @@ public class CorregoFormDTO {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public Double getNivelAtual() {
+        return nivelAtual;
+    }
+
+    public void setNivelAtual(Double nivelAtual) {
+        this.nivelAtual = nivelAtual;
     }
 
     public Double getNivelAlerta() {

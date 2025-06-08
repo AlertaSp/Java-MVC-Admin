@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="#{sensores.novoTitulo}">Novo Sensor</title>
+    <title th:text="#{sensores.editarTitulo}">Editar Sensor</title>
     <style>
         body {
             margin: 0;
@@ -66,7 +66,7 @@
             width: 100%;
         }
 
-        .btn-salvar { background-color: #28a745; }
+        .btn-salvar { background-color: #ffc107; }
         .btn-cancelar { background-color: #6c757d; }
 
         .error {
@@ -78,7 +78,7 @@
 </head>
 <body>
 <header>
-    <h1 th:text="#{sensores.novoTitulo}">Cadastrar Novo Sensor</h1>
+    <h1 th:text="#{sensores.editarTitulo}">Editar Sensor</h1>
     <div class="language-bar">
         🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
         <a th:href="@{'?lang=en'}">English</a> |
@@ -87,7 +87,7 @@
 </header>
 
 <div class="container">
-    <form th:action="@{/admin/sensores}" th:object="${sensorForm}" method="post">
+    <form th:action="@{/admin/sensores/{id}(id=${idSensor})}" th:object="${sensorForm}" method="post">
 
         <label for="codigo" th:text="#{sensores.codigo}">Código</label>
         <input type="text" id="codigo" th:field="*{codigo}" required>
@@ -99,8 +99,8 @@
 
         <label for="idCorrego" th:text="#{sensores.corrego}">Córrego</label>
         <select id="idCorrego" th:field="*{idCorrego}" required>
-            <option value="">Selecione</option>
-            <option th:each="c : ${corregos}" th:value="${c.id()}" th:text="${c.nome()}"></option>
+            <option th:each="c : ${corregos}" th:value="${c.id()}" th:text="${c.nome()}"
+                    th:selected="${c.id()} == *{idCorrego}"></option>
         </select>
         <div class="error" th:if="${#fields.hasErrors('idCorrego')}" th:errors="*{idCorrego}"></div>
 
@@ -109,7 +109,7 @@
         <div class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
 
         <div class="btn-container">
-            <button type="submit" class="btn btn-salvar" th:text="#{sensores.salvar}">Salvar</button>
+            <button type="submit" class="btn btn-salvar" th:text="#{sensores.atualizar}">Atualizar</button>
             <a th:href="@{/admin/sensores}" class="btn btn-cancelar" th:text="#{sensores.cancelar}">Cancelar</a>
         </div>
     </form>

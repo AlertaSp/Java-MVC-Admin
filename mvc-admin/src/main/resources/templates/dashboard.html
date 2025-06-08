@@ -198,12 +198,12 @@
       <tbody>
       <tr th:each="corrego : ${corregos}">
         <td th:text="${corrego.nome}">Córrego A</td>
-        <td th:text="${corrego.nivelAtual} + ' m'">1.2 m</td>
+        <td th:text="${#numbers.formatDecimal(corrego.nivelAtual, 1, 'COMMA', 1, 'POINT')} + ' m'">1.2 m</td>
         <td>
-          <span th:classappend="${corrego.status} == 'verde' ? 'tag verde' : (corrego.status == 'amarelo' ? 'tag amarelo' : 'tag vermelho')"
-                th:text="${corrego.status}">
-            Verde
-          </span>
+      <span th:class="'tag ' + ${corrego.status}"
+            th:text="${#messages.msg('dashboard.status.' + corrego.status)}">
+        Verde
+      </span>
         </td>
       </tr>
       </tbody>

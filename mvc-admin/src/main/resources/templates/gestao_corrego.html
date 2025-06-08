@@ -31,31 +31,20 @@
             text-decoration: none;
         }
 
-        .language-bar a:hover {
-            text-decoration: underline;
-        }
-
         .container {
             padding: 2rem;
-        }
-
-        h2 {
-            margin-bottom: 1rem;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 2rem;
-            table-layout: fixed;
-            word-wrap: break-word;
         }
 
         th, td {
             padding: 0.75rem;
             border: 1px solid #ccc;
             text-align: left;
-            vertical-align: top;
         }
 
         th {
@@ -66,19 +55,28 @@
             padding: 0.4rem 0.8rem;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             font-size: 0.9rem;
             text-decoration: none;
+            margin: 0.2rem;
             display: inline-block;
-            margin: 0.2rem 0.1rem;
-            white-space: nowrap;
         }
 
         .btn-editar { background-color: #ffc107; color: black; }
-        .btn-mapa { background-color: #17a2b8; color: white; }
         .btn-remover { background-color: #dc3545; color: white; }
         .btn-novo { background-color: #28a745; color: white; margin-bottom: 1rem; }
-        .btn-voltar { background-color: #6c757d; color: white; margin-top: 1rem; display: block; text-align: center; width: 100%; }
+        .btn-voltar { background-color: #6c757d; color: white; margin-top: 1rem; display: block; text-align: center; }
+
+        .tag {
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+        }
+
+        .verde { background-color: #28a745; }
+        .amarelo { background-color: #ffc107; color: black; }
+        .vermelho { background-color: #dc3545; }
 
         @media (max-width: 768px) {
             table, thead, tbody, th, td, tr {
@@ -89,33 +87,17 @@
                 display: none;
             }
 
-            tr {
-                margin-bottom: 1.5rem;
-                border-bottom: 2px solid #ddd;
-                padding-bottom: 1rem;
-            }
-
             td {
                 position: relative;
                 padding-left: 50%;
-                border: none;
-                border-bottom: 1px solid #ccc;
             }
 
             td::before {
                 position: absolute;
                 top: 0.75rem;
                 left: 10px;
-                width: 45%;
-                white-space: nowrap;
                 font-weight: bold;
                 content: attr(data-label);
-            }
-
-            .btn {
-                width: 100%;
-                margin: 0.4rem 0;
-                text-align: center;
             }
         }
     </style>
@@ -140,20 +122,28 @@
             <th th:text="#{corregos.nivelAtual}">Nível Atual</th>
             <th th:text="#{corregos.nivelAlerta}">Nível de Alerta</th>
             <th th:text="#{corregos.nivelCritico}">Nível Crítico</th>
+            <th th:text="#{corregos.status}">Status</th>
             <th th:text="#{corregos.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="corrego : ${corregos}">
-            <td data-label="#{corregos.nome}" th:text="${corrego.nome}">Nome</td>
-            <td data-label="#{corregos.localizacao}" th:text="${corrego.localizacao}">Localização</td>
-            <td data-label="#{corregos.nivelAtual}" th:text="${corrego.nivelAtual} + ' m'">1.2 m</td>
-            <td data-label="#{corregos.nivelAlerta}" th:text="${corrego.nivelAlerta} + ' m'">1.8 m</td>
-            <td data-label="#{corregos.nivelCritico}" th:text="${corrego.nivelCritico} + ' m'">2.5 m</td>
-            <td data-label="#{corregos.acoes}">
-                <a th:href="@{'/admin/corregos/editar/' + ${corrego.id}}" class="btn btn-editar" th:text="#{corregos.editar}">Editar</a>
-                <a th:href="@{'/admin/corregos/mapa/' + ${corrego.id}}" class="btn btn-mapa" th:text="#{corregos.mapa}">Ver Mapa</a>
-                <a th:href="@{'/admin/corregos/remover/' + ${corrego.id}}" class="btn btn-remover" th:text="#{corregos.remover}" onclick="return confirm('Confirmar exclusão?');">Remover</a>
+            <td th:text="${corrego.nome}">Nome</td>
+            <td th:text="${corrego.localizacao}">Localização</td>
+            <td th:text="${#numbers.formatDecimal(corrego.nivelAtual, 1, 'COMMA', 1, 'POINT')} + ' m'">0.0 m</td>
+            <td th:text="${corrego.nivelAlerta} + ' m'">1.5 m</td>
+            <td th:text="${corrego.nivelCritico} + ' m'">2.0 m</td>
+            <td>
+        <span th:class="'tag ' + ${corrego.status.toLowerCase()}"
+              th:text="${#messages.msg('dashboard.status.' + corrego.status.toLowerCase())}">
+            Status
+        </span>
+            </td>
+            <td>
+                <a th:href="@{'/admin/corregos/editar/' + ${corrego.id}}" class="btn btn-editar"
+                   th:text="#{corregos.editar}">Editar</a>
+                <a th:href="@{'/admin/corregos/remover/' + ${corrego.id}}" class="btn btn-remover"
+                   th:text="#{corregos.remover}" onclick="return confirm('Deseja remover este córrego?');">Remover</a>
             </td>
         </tr>
         </tbody>

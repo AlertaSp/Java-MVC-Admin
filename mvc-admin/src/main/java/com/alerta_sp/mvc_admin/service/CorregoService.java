@@ -20,4 +20,6 @@ public interface CorregoService {
     void deletarPorId(Long id);
 
     List<CorregoDashboardView> listarTodosComStatus();
+
+    Double buscarNivelAtual(Long idCorrego);
 }

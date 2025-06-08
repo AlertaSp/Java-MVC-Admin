@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{corregos.formTitulo}">Cadastro de Córrego</title>
+    <title th:text="#{corregos.formTitulo}">Editar Córrego</title>
     <style>
+        /* Mesmo estilo do cadastro */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +46,7 @@
             cursor: pointer;
             text-align: center;
         }
-        .btn-salvar { background-color: #28a745; color: white; }
+        .btn-salvar { background-color: #007bff; color: white; }
         .btn-cancelar { background-color: #6c757d; color: white; }
         .error { color: red; font-size: 0.9rem; }
     </style>
@@ -53,11 +54,11 @@
 <body>
 
 <header>
-    <h1 th:text="#{corregos.formTitulo}">Cadastro de Córrego</h1>
+    <h1 th:text="#{corregos.formTitulo}">Editar Córrego</h1>
 </header>
 
 <div class="container">
-    <form th:action="@{/admin/corregos}" method="post" th:object="${formCorrego}">
+    <form th:action="@{/admin/corregos/{id}(id=${idCorregoEdicao})}" method="post" th:object="${formCorrego}">
 
         <label for="nome" th:text="#{corregos.nome}">Nome</label>
         <input type="text" id="nome" th:field="*{nome}" required>

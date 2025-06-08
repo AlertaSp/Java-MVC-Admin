@@ -72,10 +72,6 @@
         <input type="text" id="longitude" th:field="*{longitude}" required>
         <div class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}"></div>
 
-        <label for="nivelAtual" th:text="#{corregos.nivelAtual}">Nível Atual</label>
-        <input type="number" id="nivelAtual" th:field="*{nivelAtual}" step="0.01" min="0">
-        <div class="error" th:if="${#fields.hasErrors('nivelAtual')}" th:errors="*{nivelAtual}"></div>
-
         <label for="nivelAlerta" th:text="#{corregos.nivelAlerta}">Nível de Alerta</label>
         <input type="number" id="nivelAlerta" th:field="*{nivelAlerta}" step="0.01" min="0" required>
         <div class="error" th:if="${#fields.hasErrors('nivelAlerta')}" th:errors="*{nivelAlerta}"></div>

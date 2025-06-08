@@ -72,8 +72,8 @@ public class SensorController {
                 .orElse("redirect:/admin/sensores");
     }
 
-    @PostMapping("/editar/{id}")
-    public String atualizarSensor(
+    @PostMapping("/{id}")
+    public String atualizar(
             @PathVariable("id") Long id,
             @Valid @ModelAttribute("sensorForm") SensorFormDTO formDto,
             BindingResult bindingResult,

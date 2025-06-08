@@ -1,7 +1,7 @@
 package com.alerta_sp.mvc_admin.messaging;
 
 import com.alerta_sp.mvc_admin.dto.AlertaDTO;
-import com.alerta_sp.mvc_admin.dto.AlertaMensagemDTO;
+import com.alerta_sp.mvc_admin.dto.MensagemAlertaDTO;
 import com.alerta_sp.mvc_admin.repository.CorregoRepository;
 import com.alerta_sp.mvc_admin.model.Corrego;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,10 +31,9 @@ public class AlertaProducer {
             throw new IllegalArgumentException("❌ Nome do córrego não pode ser nulo ou vazio ao enviar alerta.");
         }
 
-        AlertaMensagemDTO mensagemDTO = new AlertaMensagemDTO(
+        MensagemAlertaDTO mensagemDTO = new MensagemAlertaDTO(
                 dto.getMensagem(),
                 dto.getNivel(),
-                dto.getCorrego(),
                 dto.getIdCorrego()
         );
 

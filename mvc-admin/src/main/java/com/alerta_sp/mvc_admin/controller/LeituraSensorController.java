@@ -3,6 +3,7 @@ package com.alerta_sp.mvc_admin.controller;
 import com.alerta_sp.mvc_admin.dto.CorregoView;
 import com.alerta_sp.mvc_admin.dto.LeituraFormDTO;
 import com.alerta_sp.mvc_admin.dto.SensorView;
+import com.alerta_sp.mvc_admin.dto.LeituraDTO;
 import com.alerta_sp.mvc_admin.service.CorregoService;
 import com.alerta_sp.mvc_admin.service.LeituraSensorService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -79,6 +81,12 @@ public class LeituraSensorController {
         model.addAttribute("corregos", listaCorregos);
 
         return "gestao_leitura_sensores";
+    }
+
+    // Endpoint REST para fornecer as leituras ao gráfico via fetch()
+    @GetMapping("/leituras/dados")
+    public @ResponseBody List<LeituraDTO> obterLeituras(@RequestParam("idCorrego") Long idCorrego) {
+        return leituraSensorService.buscarUltimasLeituras(idCorrego);
     }
 
 }

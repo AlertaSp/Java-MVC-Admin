@@ -196,7 +196,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="corrego : ${corregos}">
+      <tr th:each="corrego : ${corregos}" th:data-id="${corrego.id}">
         <td th:text="${corrego.nome}">Córrego A</td>
         <td th:text="${#numbers.formatDecimal(corrego.nivelAtual, 1, 'COMMA', 1, 'POINT')} + ' m'">1.2 m</td>
         <td>
@@ -235,28 +235,50 @@
 
 <script>
   const ctx = document.getElementById('nivelChart');
-  const nivelChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['00h', '04h', '08h', '12h', '16h', '20h'],
-      datasets: [{
-        label: 'Nível do Córrego A (m)',
-        data: [1.1, 1.3, 1.5, 1.7, 1.8, 2.1],
-        borderColor: 'rgba(30, 60, 114, 1)',
-        backgroundColor: 'rgba(30, 60, 114, 0.1)',
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
+  let nivelChart;
+
+  function carregarGrafico(idCorrego) {
+    fetch(`/admin/leituras/dados?idCorrego=${idCorrego}`)
+      .then(r => r.json())
+      .then(dados => {
+        const labels = dados.map(d => d.dataHora);
+        const valores = dados.map(d => d.nivel);
+
+        if (nivelChart) {
+          nivelChart.data.labels = labels;
+          nivelChart.data.datasets[0].data = valores;
+          nivelChart.update();
+        } else {
+          nivelChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Nível do Córrego (m)',
+                data: valores,
+                borderColor: 'rgba(30, 60, 114, 1)',
+                backgroundColor: 'rgba(30, 60, 114, 0.1)',
+                fill: true,
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
         }
-      }
-    }
-  });
+      });
+  }
+
+  const primeiro = document.querySelector('[data-id]');
+  if (primeiro) {
+    carregarGrafico(primeiro.dataset.id);
+  }
 
   function toggleMenu() {
     const menu = document.getElementById('menu');

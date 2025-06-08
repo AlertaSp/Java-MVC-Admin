@@ -3,6 +3,7 @@ package com.alerta_sp.mvc_admin.service.impl;
 import com.alerta_sp.mvc_admin.dto.LeituraFormDTO;
 import com.alerta_sp.mvc_admin.dto.LeituraView;
 import com.alerta_sp.mvc_admin.dto.SensorView;
+import com.alerta_sp.mvc_admin.dto.LeituraDTO;
 import com.alerta_sp.mvc_admin.model.LeituraSensor;
 import com.alerta_sp.mvc_admin.model.Sensor;
 import com.alerta_sp.mvc_admin.repository.LeituraSensorRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 
 @Service
 @Transactional
@@ -62,6 +65,19 @@ public class LeituraSensorServiceImpl implements LeituraSensorService {
     public List<SensorView> listarSensoresDisponiveis() {
         return sensorRepository.findAll().stream()
                 .map(SensorView::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LeituraDTO> buscarUltimasLeituras(Long idCorrego) {
+        return leituraSensorRepository
+                .findTop24BySensor_Corrego_IdOrderByDataHoraDesc(idCorrego)
+                .stream()
+                .sorted(Comparator.comparing(LeituraSensor::getDataHora))
+                .map(l -> new LeituraDTO(
+                        l.getDataHora().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        l.getNivel()
+                ))
                 .collect(Collectors.toList());
     }
 }

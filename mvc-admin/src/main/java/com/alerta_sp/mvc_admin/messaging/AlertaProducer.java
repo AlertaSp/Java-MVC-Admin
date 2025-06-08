@@ -4,6 +4,7 @@ import com.alerta_sp.mvc_admin.dto.AlertaDTO;
 import com.alerta_sp.mvc_admin.dto.MensagemAlertaDTO;
 import com.alerta_sp.mvc_admin.repository.CorregoRepository;
 import com.alerta_sp.mvc_admin.model.Corrego;
+import com.alerta_sp.mvc_admin.model.TipoAlerta;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,14 @@ public class AlertaProducer {
                 dto.getNivel(),
                 dto.getIdCorrego()
         );
+
+        // Garante que o campo 'tipo' esteja sempre definido
+        try {
+            String tipo = TipoAlerta.valueOf(dto.getNivel()).name();
+            mensagemDTO.setTipo(tipo);
+        } catch (Exception ex) {
+            mensagemDTO.setTipo("INDEFINIDO");
+        }
 
         rabbitTemplate.convertAndSend(exchange, routingKey, mensagemDTO);
         System.out.println("🚀 Alerta enviado via RabbitMQ: " + mensagemDTO);

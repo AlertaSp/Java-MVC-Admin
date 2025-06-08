@@ -138,27 +138,50 @@
 
 <script>
     const ctx = document.getElementById('graficoLeituras');
-    const graficoLeituras = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['01/05', '02/05', '03/05', '04/05'],
-            datasets: [{
-                label: 'Nível do Córrego (m)',
-                data: [1.2, 1.5, 1.8, 2.0],
-                borderColor: '#1e3c72',
-                backgroundColor: 'rgba(30, 60, 114, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+    let graficoLeituras;
+
+    function carregarGrafico(idCorrego) {
+        fetch(`/admin/leituras/dados?idCorrego=${idCorrego}`)
+            .then(r => r.json())
+            .then(dados => {
+                const labels = dados.map(d => d.dataHora);
+                const valores = dados.map(d => d.nivel);
+
+                if (graficoLeituras) {
+                    graficoLeituras.data.labels = labels;
+                    graficoLeituras.data.datasets[0].data = valores;
+                    graficoLeituras.update();
+                } else {
+                    graficoLeituras = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Nível do Córrego (m)',
+                                data: valores,
+                                borderColor: '#1e3c72',
+                                backgroundColor: 'rgba(30, 60, 114, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                 }
-            }
-        }
+            });
+    }
+
+    const selectCorrego = document.getElementById('corrego');
+    carregarGrafico(selectCorrego.value);
+    selectCorrego.addEventListener('change', () => {
+        carregarGrafico(selectCorrego.value);
     });
 </script>
 </body>

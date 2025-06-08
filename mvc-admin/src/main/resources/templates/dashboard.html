@@ -175,7 +175,6 @@
     <a th:href="@{/admin/leituras}"      th:text="#{menu.leituras}">Leituras</a>
     <a th:href="@{/admin/alertas}"       th:text="#{menu.alertas}">Alertas</a>
     <a th:href="@{/admin/alertas/emitir}"th:text="#{menu.emitirAlerta}">Emitir Alerta</a> <!-- NOVO -->
-    <a th:href="@{/admin/configuracoes}" th:text="#{menu.configuracoes}">Configurações</a>
   </nav>
   <div class="language-bar">
     🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
@@ -227,6 +226,15 @@
 <div class="section" style="margin: 2rem">
   <h2 th:text="#{dashboard.grafico}">Histórico de Níveis (últimas 24h)</h2>
   <canvas id="nivelChart" height="80"></canvas>
+</div>
+
+<form th:action="@{/admin/ia/gerar-relatorio}" method="post" style="text-align: center; margin-bottom: 1rem;">
+    <button type="submit" class="btn btn-primary">Gerar Relatório com IA</button>
+</form>
+
+<div th:if="${relatorioIA != null}" class="section" style="margin: 2rem">
+    <h3>Relatório Gerado</h3>
+    <p th:text="${relatorioIA}"></p>
 </div>
 
 <div style="text-align: center;">

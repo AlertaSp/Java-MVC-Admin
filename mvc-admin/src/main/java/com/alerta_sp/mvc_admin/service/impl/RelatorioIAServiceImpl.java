@@ -46,4 +46,9 @@ public class RelatorioIAServiceImpl implements RelatorioIAService {
                 .call()
                 .content();
     }
+
+    @Override
+    public String gerarRelatorioUltimasLeituras() {
+        return gerarRelatorio();
+    }
 }

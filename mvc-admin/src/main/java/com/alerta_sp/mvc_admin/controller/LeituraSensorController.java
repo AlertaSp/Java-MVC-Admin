@@ -1,12 +1,16 @@
 package com.alerta_sp.mvc_admin.controller;
 
 import com.alerta_sp.mvc_admin.dto.CorregoView;
+import com.alerta_sp.mvc_admin.dto.LeituraFormDTO;
+import com.alerta_sp.mvc_admin.dto.SensorView;
 import com.alerta_sp.mvc_admin.service.CorregoService;
 import com.alerta_sp.mvc_admin.service.LeituraSensorService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,6 +42,20 @@ public class LeituraSensorController {
         List<CorregoView> listaCorregos = corregoService.listarTodos();
         model.addAttribute("corregos", listaCorregos);
         return "gestao_leitura_sensores";
+    }
+
+    @GetMapping("/leitura/novo")
+    public String novaLeituraForm(Model model) {
+        List<SensorView> sensores = leituraSensorService.listarSensoresDisponiveis();
+        model.addAttribute("leitura", new LeituraFormDTO());
+        model.addAttribute("sensores", sensores);
+        return "formulario_leitura";
+    }
+
+    @PostMapping("/leitura")
+    public String salvarNovaLeitura(@ModelAttribute("leitura") LeituraFormDTO leitura) {
+        leituraSensorService.salvar(leitura);
+        return "redirect:/admin/dashboard";
     }
 
     /**

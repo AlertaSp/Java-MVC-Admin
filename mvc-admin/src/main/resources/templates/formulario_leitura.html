@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{leituras.novoTitulo}">Nova Leitura</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; color: #333; }
+        header { background-color: #1e3c72; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .language-bar a { color: #fff; margin: 0 0.5rem; text-decoration: none; }
+        .container { max-width: 600px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        label { display: block; margin: 0.5rem 0 0.2rem; font-weight: bold; }
+        input, select { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 1rem; }
+        .btn-container { display: flex; justify-content: space-between; gap: 1rem; }
+        .btn { padding: 0.8rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; color: white; text-decoration: none; width: 100%; }
+        .btn-salvar { background-color: #28a745; }
+        .btn-cancelar { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{leituras.novoTitulo}">Nova Leitura</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <form th:action="@{/admin/leitura}" th:object="${leitura}" method="post">
+        <label for="idSensor" th:text="#{leituras.sensor}">Sensor</label>
+        <select id="idSensor" th:field="*{idSensor}" required>
+            <option value="" disabled selected>Selecione</option>
+            <option th:each="s : ${sensores}" th:value="${s.id}" th:text="${s.codigo}"></option>
+        </select>
+
+        <label for="nivel" th:text="#{leituras.nivel}">Nível</label>
+        <input type="number" step="0.01" id="nivel" th:field="*{nivel}" required>
+
+        <div class="btn-container">
+            <button type="submit" class="btn btn-salvar" th:text="#{leituras.salvar}">Salvar</button>
+            <a th:href="@{/admin/dashboard}" class="btn btn-cancelar" th:text="#{leituras.cancelar}">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -12,4 +12,7 @@ public interface LeituraSensorRepository extends JpaRepository<LeituraSensor, Lo
 
     // Retorna as 24 leituras mais recentes de um determinado córrego
     List<LeituraSensor> findTop24BySensor_Corrego_IdOrderByDataHoraDesc(Long corregoId);
+
+    // Leituras após determinado horário
+    List<LeituraSensor> findByDataHoraAfterOrderByDataHoraAsc(java.time.LocalDateTime dataHora);
 }

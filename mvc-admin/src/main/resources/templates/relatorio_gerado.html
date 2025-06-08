@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{relatorio.titulo}">Relatório Gerado</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; color: #333; }
+        header { background-color: #1e3c72; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .language-bar a { color: #fff; margin: 0 0.5rem; text-decoration: none; }
+        .container { max-width: 800px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        pre { white-space: pre-wrap; }
+        .btn-container { margin-top: 1.5rem; display: flex; gap: 1rem; }
+        .btn { padding: 0.6rem 1.2rem; border: none; border-radius: 5px; color: white; text-decoration: none; cursor: pointer; }
+        .btn-voltar { background-color: #6c757d; }
+        .btn-novo { background-color: #28a745; }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="#{relatorio.titulo}">Relatório Gerado</h1>
+    <div class="language-bar">
+        🌐 <a th:href="@{'?lang=pt_BR'}">Português</a> |
+        <a th:href="@{'?lang=en'}">English</a> |
+        <a th:href="@{'?lang=es'}">Español</a>
+    </div>
+</header>
+
+<div class="container">
+    <pre th:text="${relatorio}">Texto do relatório gerado pela IA...</pre>
+
+    <div class="btn-container">
+        <a th:href="@{/admin/dashboard}" class="btn btn-voltar" th:text="#{relatorio.voltar}">Voltar</a>
+        <form th:action="@{/admin/relatorio/gerar}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-novo" th:text="#{relatorio.gerarNovo}">Gerar novo relatório</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

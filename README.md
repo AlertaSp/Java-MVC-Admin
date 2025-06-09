@@ -29,9 +29,19 @@ A linguagem **Java** é responsável pelo backend da aplicação administrativa,
 
 ## 📌 Links Importantes 
 
-* 🔜 Diagrama UML (\[adicionar link aqui])
-* 🎥 Vídeo de Explicação (\[adicionar link aqui])
-* 🎬 Vídeo Pitch (\[adicionar link aqui])
+Link Vídeo Apresentação Java: https://youtu.be/8_yusiZXgJ4
+
+Link Vídeo Pitch: https://www.youtube.com/watch?v=x8Oygxk1--8
+
+Link Vídeo DevOps: https://youtu.be/x3Pc_qOISF8
+
+Link do WebApp: https://alertasp-java-rm553568.azurewebsites.net/home
+
+Usuario: admin
+
+senha: admin123
+
+caso queira acessar o banco consulte o readme de DevOps
 
 ## 🛠️ Funcionalidades do Painel Admin (`/admin/**`)
 
